@@ -1,9 +1,7 @@
-
-
-/ModLoader/app/src/main/java/com/modloader/util/FileUtils.java
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/java/com/modloader/util/FileUtils.java
 
 // File: FileUtils.java - Complete with all missing methods
-// Path: /app/src/main/java/com/terrarialoader/util/FileUtils.java
+// Path: /app/src/main/java/com/modloader/util/FileUtils.java
 
 package com.modloader.util;
 
@@ -546,8 +544,7 @@ public class FileUtils {
     }
 }
 
-
-/ModLoader/app/src/main/java/com/modloader/util/LogUtils.java
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/java/com/modloader/util/LogUtils.java
 
 // File: LogUtils.java - Complete logging utility class
 // Path: /storage/emulated/0/AndroidIDEProjects/ModLoader/app/src/main/java/com/modloader/util/LogUtils.java
@@ -566,7 +563,7 @@ import java.util.Locale;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class LogUtils {
-    private static final String TAG = "TerrariaLoader";
+    private static final String TAG = "ModLoader";
     private static final String DEBUG_TAG = "TL_Debug";
     private static final String USER_TAG = "TL_User";
     private static final String ERROR_TAG = "TL_Error";
@@ -615,7 +612,7 @@ public class LogUtils {
      * Initialize app startup logging
      */
     public static void initializeAppStartup() {
-        logUser("🚀 TerrariaLoader starting up...");
+        logUser("🚀 ModLoader starting up...");
         logDebug("App startup initialization");
         logDebug("Android Version: " + android.os.Build.VERSION.RELEASE);
         logDebug("Device Model: " + android.os.Build.MODEL);
@@ -1064,11 +1061,11 @@ public class LogUtils {
         if (applicationContext != null) {
             try {
                 File crashFile = new File(applicationContext.getExternalFilesDir(null), 
-                    "TerrariaLoader/com.and.games505.TerrariaPaid/AppLogs/crash_" + System.currentTimeMillis() + ".txt");
+                    "ModLoader/com.and.games505.TerrariaPaid/AppLogs/crash_" + System.currentTimeMillis() + ".txt");
                 crashFile.getParentFile().mkdirs();
                 
                 try (FileWriter writer = new FileWriter(crashFile)) {
-                    writer.write("=== TerrariaLoader Crash Report ===\n");
+                    writer.write("=== ModLoader Crash Report ===\n");
                     writer.write("Timestamp: " + new Date().toString() + "\n");
                     writer.write("Component: " + component + "\n");
                     writer.write("Error: " + throwable.getMessage() + "\n\n");
@@ -1133,11 +1130,10 @@ public class LogUtils {
     }
 }
 
-
-/ModLoader/app/src/main/java/com/modloader/util/MelonLoaderDiagnostic.java
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/java/com/modloader/util/MelonLoaderDiagnostic.java
 
 // File: MelonLoaderDiagnostic.java (Diagnostic Tool)
-// Path: /storage/emulated/0/AndroidIDEProjects/TerrariaML/app/src/main/java/com/terrarialoader/util/MelonLoaderDiagnostic.java
+// Path: /storage/emulated/0/AndroidIDEProjects/TerrariaML/app/src/main/java/com/modloader/util/MelonLoaderDiagnostic.java
 
 package com.modloader.util;
 
@@ -1324,17 +1320,16 @@ public class MelonLoaderDiagnostic {
         suggestions.append("• Have stable internet connection (for automated)\n");
         suggestions.append("• Grant file manager permissions (for manual)\n");
         suggestions.append("• Use exact directory paths shown above\n");
-        suggestions.append("• Restart TerrariaLoader after installation\n");
+        suggestions.append("• Restart ModLoader after installation\n");
         
         return suggestions.toString();
     }
 }
 
-
-/ModLoader/app/src/main/java/com/modloader/util/OfflineZipImporter.java
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/java/com/modloader/util/OfflineZipImporter.java
 
 // File: OfflineZipImporter.java - Smart ZIP Import with Auto-Detection
-// Path: /main/java/com/terrarialoader/util/OfflineZipImporter.java
+// Path: /main/java/com/modloader/util/OfflineZipImporter.java
 
 package com.modloader.util;
 
@@ -1680,11 +1675,10 @@ public class OfflineZipImporter {
     }
 }
 
-
-/ModLoader/app/src/main/java/com/modloader/util/OnlineInstaller.java
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/java/com/modloader/util/OnlineInstaller.java
 
 // File: OnlineInstaller.java (Utility Class) - Complete Automated Installation System
-// Path: /storage/emulated/0/AndroidIDEProjects/TerrariaML/app/src/main/java/com/terrarialoader/util/OnlineInstaller.java
+// Path: /storage/emulated/0/AndroidIDEProjects/TerrariaML/app/src/main/java/com/modloader/util/OnlineInstaller.java
 
 package com.modloader.util;
 
@@ -2069,8 +2063,7 @@ public class OnlineInstaller {
     }
 }
 
-
-/ModLoader/app/src/main/java/com/modloader/util/PatchResult.java
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/java/com/modloader/util/PatchResult.java
 
 // File: PatchResult.java - Complete patch result class
 // Path: /storage/emulated/0/AndroidIDEProjects/ModLoader/app/src/main/java/com/modloader/util/PatchResult.java
@@ -2269,476 +2262,598 @@ public class PatchResult {
     }
 }
 
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/java/com/modloader/util/PathManager.java
 
-/ModLoader/app/src/main/java/com/modloader/util/PathManager.java
-
-// File: PathManager.java (FIXED Part 1) - Centralized Path Management
-// Path: /storage/emulated/0/AndroidIDEProjects/TerrariaML/main/java/com/terrarialoader/util/PathManager.java
+// File: PathManager.java - Complete Updated PathManager with Plugin System Support
+// Path: /storage/emulated/0/AndroidIDEProjects/ModLoader/app/src/main/java/com/modloader/util/PathManager.java
 
 package com.modloader.util;
 
 import android.content.Context;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Centralized path management for TerrariaLoader
- * All file operations should use these standardized paths
- * FIXED: Added proper app logs directory support and correct structure
+ * Enhanced PathManager with Plugin System Support
+ * Manages all application paths including plugin directories
  */
 public class PathManager {
+
+    private static final String TAG = "PathManager";
     
-    // Base directory: /storage/emulated/0/Android/data/com.modloader/files
-    private static File getAppDataDirectory(Context context) {
-        return context.getExternalFilesDir(null);
-    }
+    // Base directory structure
+    private static final String BASE_DIR = "ModLoader";
+    private static final String TERRARIA_PACKAGE = "com.and.games505.TerrariaPaid";
     
-    // === TERRARIA LOADER STRUCTURE ===
+    // Core directories
+    private static final String MODS_DIR = "Mods";
+    private static final String DEX_MODS_DIR = "Mods/DEX";
+    private static final String DLL_MODS_DIR = "Mods/DLL";
+    private static final String CONFIG_DIR = "Config";
+    private static final String LOGS_DIR = "Logs";
+    private static final String APP_LOGS_DIR = "AppLogs";
+    private static final String BACKUPS_DIR = "Backups";
     
+    // Loader directories
+    private static final String LOADERS_DIR = "Loaders";
+    private static final String MELONLOADER_DIR = "Loaders/MelonLoader";
+    private static final String MELONLOADER_NET8_DIR = "Loaders/MelonLoader/net8";
+    private static final String MELONLOADER_NET35_DIR = "Loaders/MelonLoader/net35";
+    private static final String MELONLOADER_DEPS_DIR = "Loaders/MelonLoader/Dependencies";
+    
+    // Plugin directories (NEW)
+    private static final String PLUGINS_DIR = "Plugins";
+    private static final String PLUGIN_STORAGE_DIR = "Plugins/Storage";
+    private static final String PLUGIN_CONFIG_DIR = "Plugins/Config";
+    private static final String PLUGIN_TEMP_DIR = "Plugins/Temp";
+    private static final String PLUGIN_BACKUPS_DIR = "Plugins/Backups";
+    private static final String PLUGIN_LOGS_DIR = "Plugins/Logs";
+    private static final String PLUGIN_CACHE_DIR = "Plugins/Cache";
+    private static final String PLUGIN_SANDBOX_DIR = "Plugins/Sandbox";
+
+    // Legacy support
+    private static final String LEGACY_MODS_DIR = "mods";
+
+    // ===== BASE DIRECTORY METHODS =====
+
     /**
-     * Base TerrariaLoader directory
-     * @return /storage/emulated/0/Android/data/com.modloader/files/TerrariaLoader
+     * Get the main app base directory
      */
-    public static File getTerrariaLoaderBaseDir(Context context) {
-        return new File(getAppDataDirectory(context), "TerrariaLoader");
+    public static File getAppBaseDir(Context context) {
+        if (context == null) return null;
+        return new File(context.getExternalFilesDir(null), BASE_DIR);
     }
-    
+
     /**
-     * Game-specific base directory
-     * @return /storage/emulated/0/Android/data/com.modloader/files/TerrariaLoader/{gamePackage}
+     * Get game-specific base directory
      */
     public static File getGameBaseDir(Context context, String gamePackage) {
-        return new File(getTerrariaLoaderBaseDir(context), gamePackage);
+        if (context == null || gamePackage == null) return null;
+        return new File(getAppBaseDir(context), gamePackage);
     }
-    
+
+    // ===== MOD DIRECTORY METHODS =====
+
     /**
-     * Default Terraria directory
-     * @return /storage/emulated/0/Android/data/com.modloader/files/TerrariaLoader/com.and.games505.TerrariaPaid
-     */
-    public static File getTerrariaBaseDir(Context context) {
-        return getGameBaseDir(context, "com.and.games505.TerrariaPaid");
-    }
-    
-    // === MOD DIRECTORIES ===
-    
-    /**
-     * DLL Mods directory
-     * @return /storage/emulated/0/Android/data/com.modloader/files/TerrariaLoader/{gamePackage}/Mods/DLL
-     */
-    public static File getDllModsDir(Context context, String gamePackage) {
-        return new File(getGameBaseDir(context, gamePackage), "Mods/DLL");
-    }
-    
-    /**
-     * DEX Mods directory
-     * @return /storage/emulated/0/Android/data/com.modloader/files/TerrariaLoader/{gamePackage}/Mods/DEX
+     * Get DEX mods directory
      */
     public static File getDexModsDir(Context context, String gamePackage) {
-        return new File(getGameBaseDir(context, gamePackage), "Mods/DEX");
+        if (context == null || gamePackage == null) return null;
+        return new File(getGameBaseDir(context, gamePackage), DEX_MODS_DIR);
     }
-    
+
     /**
-     * Legacy mods directory (for backward compatibility)
-     * @return /storage/emulated/0/Android/data/com.modloader/files/mods
+     * Get DLL mods directory
+     */
+    public static File getDllModsDir(Context context, String gamePackage) {
+        if (context == null || gamePackage == null) return null;
+        return new File(getGameBaseDir(context, gamePackage), DLL_MODS_DIR);
+    }
+
+    /**
+     * Get legacy mods directory (for migration)
      */
     public static File getLegacyModsDir(Context context) {
-        return new File(getAppDataDirectory(context), "mods");
+        if (context == null) return null;
+        return new File(context.getExternalFilesDir(null), LEGACY_MODS_DIR);
     }
-    
-    // === MELONLOADER STRUCTURE ===
-    
+
+    // ===== LOADER DIRECTORY METHODS =====
+
     /**
-     * MelonLoader base directory
-     * @return /storage/emulated/0/Android/data/com.modloader/files/TerrariaLoader/{gamePackage}/Loaders/MelonLoader
+     * Get MelonLoader base directory
      */
     public static File getMelonLoaderDir(Context context, String gamePackage) {
-        return new File(getGameBaseDir(context, gamePackage), "Loaders/MelonLoader");
+        if (context == null || gamePackage == null) return null;
+        return new File(getGameBaseDir(context, gamePackage), MELONLOADER_DIR);
     }
-    
+
     /**
-     * MelonLoader NET8 runtime directory
-     * @return /storage/emulated/0/Android/data/com.modloader/files/TerrariaLoader/{gamePackage}/Loaders/MelonLoader/net8
+     * Get MelonLoader NET8 directory
      */
     public static File getMelonLoaderNet8Dir(Context context, String gamePackage) {
-        return new File(getMelonLoaderDir(context, gamePackage), "net8");
+        if (context == null || gamePackage == null) return null;
+        return new File(getGameBaseDir(context, gamePackage), MELONLOADER_NET8_DIR);
     }
-    
+
     /**
-     * MelonLoader NET35 runtime directory
-     * @return /storage/emulated/0/Android/data/com.modloader/files/TerrariaLoader/{gamePackage}/Loaders/MelonLoader/net35
+     * Get MelonLoader NET35 directory
      */
     public static File getMelonLoaderNet35Dir(Context context, String gamePackage) {
-        return new File(getMelonLoaderDir(context, gamePackage), "net35");
+        if (context == null || gamePackage == null) return null;
+        return new File(getGameBaseDir(context, gamePackage), MELONLOADER_NET35_DIR);
     }
-    
+
     /**
-     * MelonLoader Dependencies directory
-     * @return /storage/emulated/0/Android/data/com.modloader/files/TerrariaLoader/{gamePackage}/Loaders/MelonLoader/Dependencies
+     * Get MelonLoader Dependencies directory
      */
     public static File getMelonLoaderDependenciesDir(Context context, String gamePackage) {
-        return new File(getMelonLoaderDir(context, gamePackage), "Dependencies");
+        if (context == null || gamePackage == null) return null;
+        return new File(getGameBaseDir(context, gamePackage), MELONLOADER_DEPS_DIR);
     }
-    
-    // === PLUGINS AND USERLIBS (FIXED: Now at game root level) ===
-    
+
+    // ===== PLUGIN DIRECTORY METHODS (NEW) =====
+
     /**
-     * FIXED: Plugins directory (at game root level, not inside MelonLoader)
-     * @return /storage/emulated/0/Android/data/com.modloader/files/TerrariaLoader/{gamePackage}/Plugins
+     * Get main plugins directory
      */
     public static File getPluginsDir(Context context, String gamePackage) {
-        return new File(getGameBaseDir(context, gamePackage), "Plugins");
+        if (context == null || gamePackage == null) return null;
+        return new File(getGameBaseDir(context, gamePackage), PLUGINS_DIR);
     }
-    
+
     /**
-     * FIXED: UserLibs directory (at game root level, not inside MelonLoader)
-     * @return /storage/emulated/0/Android/data/com.modloader/files/TerrariaLoader/{gamePackage}/UserLibs
+     * Get plugin storage directory for persistent data
      */
-    public static File getUserLibsDir(Context context, String gamePackage) {
-        return new File(getGameBaseDir(context, gamePackage), "UserLibs");
+    public static File getPluginStorageDir(Context context, String gamePackage) {
+        if (context == null || gamePackage == null) return null;
+        return new File(getGameBaseDir(context, gamePackage), PLUGIN_STORAGE_DIR);
     }
-    
-    // === LOG DIRECTORIES ===
-    
+
     /**
-     * FIXED: Game logs directory (MelonLoader logs)
-     * @return /storage/emulated/0/Android/data/com.modloader/files/TerrariaLoader/{gamePackage}/Logs
+     * Get plugin configuration directory
      */
-    public static File getLogsDir(Context context, String gamePackage) {
-        return new File(getGameBaseDir(context, gamePackage), "Logs");
+    public static File getPluginConfigDir(Context context, String gamePackage) {
+        if (context == null || gamePackage == null) return null;
+        return new File(getGameBaseDir(context, gamePackage), PLUGIN_CONFIG_DIR);
     }
-    
+
     /**
-     * FIXED: App logs directory (TerrariaLoader app logs)
-     * @return /storage/emulated/0/Android/data/com.modloader/files/TerrariaLoader/{gamePackage}/AppLogs
+     * Get plugin temporary directory
      */
-    public static File getAppLogsDir(Context context, String gamePackage) {
-        return new File(getGameBaseDir(context, gamePackage), "AppLogs");
+    public static File getPluginTempDir(Context context, String gamePackage) {
+        if (context == null || gamePackage == null) return null;
+        return new File(getGameBaseDir(context, gamePackage), PLUGIN_TEMP_DIR);
     }
-    
+
     /**
-     * Legacy app logs directory (for backward compatibility)
-     * @return /storage/emulated/0/Android/data/com.modloader/files/logs
+     * Get plugin backups directory
      */
-    public static File getLegacyAppLogsDir(Context context) {
-        return new File(getAppDataDirectory(context), "logs");
+    public static File getPluginBackupsDir(Context context, String gamePackage) {
+        if (context == null || gamePackage == null) return null;
+        return new File(getGameBaseDir(context, gamePackage), PLUGIN_BACKUPS_DIR);
     }
-    
+
     /**
-     * Exports directory
-     * @return /storage/emulated/0/Android/data/com.modloader/files/exports
+     * Get plugin logs directory
      */
-    public static File getExportsDir(Context context) {
-        return new File(getAppDataDirectory(context), "exports");
+    public static File getPluginLogsDir(Context context, String gamePackage) {
+        if (context == null || gamePackage == null) return null;
+        return new File(getGameBaseDir(context, gamePackage), PLUGIN_LOGS_DIR);
     }
-    
-    // === BACKUP DIRECTORIES ===
-    
+
     /**
-     * Backups directory
-     * @return /storage/emulated/0/Android/data/com.modloader/files/TerrariaLoader/{gamePackage}/Backups
+     * Get plugin cache directory
      */
-    public static File getBackupsDir(Context context, String gamePackage) {
-        return new File(getGameBaseDir(context, gamePackage), "Backups");
+    public static File getPluginCacheDir(Context context, String gamePackage) {
+        if (context == null || gamePackage == null) return null;
+        return new File(getGameBaseDir(context, gamePackage), PLUGIN_CACHE_DIR);
     }
-    
-    // === CONFIG DIRECTORIES ===
-    
+
     /**
-     * Config directory
-     * @return /storage/emulated/0/Android/data/com.modloader/files/TerrariaLoader/{gamePackage}/Config
+     * Get plugin sandbox directory for isolated execution
+     */
+    public static File getPluginSandboxDir(Context context, String gamePackage) {
+        if (context == null || gamePackage == null) return null;
+        return new File(getGameBaseDir(context, gamePackage), PLUGIN_SANDBOX_DIR);
+    }
+
+    /**
+     * Get plugin-specific storage directory
+     */
+    public static File getPluginSpecificDir(Context context, String gamePackage, String pluginId) {
+        if (context == null || gamePackage == null || pluginId == null) return null;
+        return new File(getPluginStorageDir(context, gamePackage), pluginId);
+    }
+
+    // ===== UTILITY DIRECTORY METHODS =====
+
+    /**
+     * Get configuration directory
      */
     public static File getConfigDir(Context context, String gamePackage) {
-        return new File(getGameBaseDir(context, gamePackage), "Config");
+        if (context == null || gamePackage == null) return null;
+        return new File(getGameBaseDir(context, gamePackage), CONFIG_DIR);
     }
-    
-    // === UTILITY METHODS ===
-    
+
+    /**
+     * Get logs directory
+     */
+    public static File getLogsDir(Context context, String gamePackage) {
+        if (context == null || gamePackage == null) return null;
+        return new File(getGameBaseDir(context, gamePackage), LOGS_DIR);
+    }
+
+    /**
+     * Get app logs directory
+     */
+    public static File getAppLogsDir(Context context, String gamePackage) {
+        if (context == null || gamePackage == null) return null;
+        return new File(getGameBaseDir(context, gamePackage), APP_LOGS_DIR);
+    }
+
+    /**
+     * Get backups directory
+     */
+    public static File getBackupsDir(Context context, String gamePackage) {
+        if (context == null || gamePackage == null) return null;
+        return new File(getGameBaseDir(context, gamePackage), BACKUPS_DIR);
+    }
+
+    // ===== DIRECTORY MANAGEMENT METHODS =====
+
     /**
      * Ensure a directory exists, creating it if necessary
-     * @param directory The directory to ensure exists
-     * @return true if directory exists or was created successfully
      */
     public static boolean ensureDirectoryExists(File directory) {
-        if (directory == null) {
-            LogUtils.logDebug("Directory is null");
-            return false;
-        }
-        
-        if (directory.exists()) {
-            return directory.isDirectory();
-        }
+        if (directory == null) return false;
         
         try {
-            boolean created = directory.mkdirs();
-            if (created) {
-                LogUtils.logDebug("Created directory: " + directory.getAbsolutePath());
-            } else {
-                LogUtils.logDebug("Failed to create directory: " + directory.getAbsolutePath());
+            if (!directory.exists()) {
+                boolean created = directory.mkdirs();
+                if (created) {
+                    LogUtils.logDebug("Created directory: " + directory.getAbsolutePath());
+                } else {
+                    LogUtils.logDebug("Failed to create directory: " + directory.getAbsolutePath());
+                }
+                return created;
             }
-            return created;
+            return true;
         } catch (Exception e) {
-            LogUtils.logDebug("Error creating directory: " + e.getMessage());
+            LogUtils.logDebug("Error creating directory " + directory.getAbsolutePath() + ": " + e.getMessage());
             return false;
         }
     }
-    
+
     /**
-     * FIXED: Initialize all required directories for a game package
-     * @param context Application context
-     * @param gamePackage Game package name
-     * @return true if all directories were created successfully
+     * Initialize all core game directories
      */
     public static boolean initializeGameDirectories(Context context, String gamePackage) {
+        if (context == null || gamePackage == null) return false;
+
         LogUtils.logUser("Initializing directory structure for: " + gamePackage);
-        
-        File[] requiredDirs = {
-            getGameBaseDir(context, gamePackage),
-            getDllModsDir(context, gamePackage),
-            getDexModsDir(context, gamePackage),
-            getMelonLoaderDir(context, gamePackage),
-            getMelonLoaderNet8Dir(context, gamePackage),
-            getMelonLoaderNet35Dir(context, gamePackage),
-            getMelonLoaderDependenciesDir(context, gamePackage),
-            getPluginsDir(context, gamePackage),        // FIXED: Added Plugins
-            getUserLibsDir(context, gamePackage),       // FIXED: Added UserLibs
-            getLogsDir(context, gamePackage),           // Game logs
-            getAppLogsDir(context, gamePackage),        // FIXED: Added App logs
-            getBackupsDir(context, gamePackage),
-            getConfigDir(context, gamePackage)
-        };
-        
-        boolean allSuccess = true;
+
+        List<File> directories = getAllRequiredDirectories(context, gamePackage);
         int createdCount = 0;
-        
-        for (File dir : requiredDirs) {
-            if (!dir.exists()) {
-                if (ensureDirectoryExists(dir)) {
-                    createdCount++;
-                } else {
-                    allSuccess = false;
-                    LogUtils.logDebug("Failed to create: " + dir.getAbsolutePath());
-                }
+        int totalCount = directories.size();
+
+        for (File directory : directories) {
+            if (ensureDirectoryExists(directory)) {
+                createdCount++;
             }
         }
-        
-        LogUtils.logUser("Directory initialization complete: " + createdCount + " directories created");
-        
-        // Create README files
-        if (allSuccess) {
-            createReadmeFiles(context, gamePackage);
+
+        if (createdCount > 0) {
+            LogUtils.logUser("✅ Created " + createdCount + "/" + totalCount + " directories");
+        } else {
+            LogUtils.logDebug("All directories already exist");
         }
-        
-        return allSuccess;
+
+        return createdCount == totalCount || (totalCount - createdCount) < 3; // Allow some failures
     }
-    
+
     /**
-     * FIXED: Create helpful README files in directories
+     * Initialize plugin directories
      */
-    private static void createReadmeFiles(Context context, String gamePackage) {
+    public static boolean initializePluginDirectories(Context context, String gamePackage) {
+        if (context == null || gamePackage == null) return false;
+
+        LogUtils.logUser("Initializing plugin directories for: " + gamePackage);
+
+        List<File> pluginDirectories = getAllPluginDirectories(context, gamePackage);
+        int createdCount = 0;
+
+        for (File directory : pluginDirectories) {
+            if (ensureDirectoryExists(directory)) {
+                createdCount++;
+            }
+        }
+
+        if (createdCount > 0) {
+            LogUtils.logUser("✅ Created " + createdCount + " plugin directories");
+        }
+
+        // Create plugin info files
+        createPluginInfoFiles(context, gamePackage);
+
+        return true;
+    }
+
+    /**
+     * Get all required directories for a game
+     */
+    private static List<File> getAllRequiredDirectories(Context context, String gamePackage) {
+        List<File> directories = new ArrayList<>();
+        
+        // Core directories
+        directories.add(getGameBaseDir(context, gamePackage));
+        directories.add(getDexModsDir(context, gamePackage));
+        directories.add(getDllModsDir(context, gamePackage));
+        directories.add(getConfigDir(context, gamePackage));
+        directories.add(getLogsDir(context, gamePackage));
+        directories.add(getAppLogsDir(context, gamePackage));
+        directories.add(getBackupsDir(context, gamePackage));
+        
+        // Loader directories
+        directories.add(getMelonLoaderDir(context, gamePackage));
+        directories.add(getMelonLoaderNet8Dir(context, gamePackage));
+        directories.add(getMelonLoaderNet35Dir(context, gamePackage));
+        directories.add(getMelonLoaderDependenciesDir(context, gamePackage));
+        
+        // Plugin directories
+        directories.addAll(getAllPluginDirectories(context, gamePackage));
+        
+        return directories;
+    }
+
+    /**
+     * Get all plugin directories
+     */
+    private static List<File> getAllPluginDirectories(Context context, String gamePackage) {
+        List<File> directories = new ArrayList<>();
+        
+        directories.add(getPluginsDir(context, gamePackage));
+        directories.add(getPluginStorageDir(context, gamePackage));
+        directories.add(getPluginConfigDir(context, gamePackage));
+        directories.add(getPluginTempDir(context, gamePackage));
+        directories.add(getPluginBackupsDir(context, gamePackage));
+        directories.add(getPluginLogsDir(context, gamePackage));
+        directories.add(getPluginCacheDir(context, gamePackage));
+        directories.add(getPluginSandboxDir(context, gamePackage));
+        
+        return directories;
+    }
+
+    /**
+     * Create plugin information files
+     */
+    private static void createPluginInfoFiles(Context context, String gamePackage) {
         try {
-            // DLL Mods README
-            File dllReadme = new File(getDllModsDir(context, gamePackage), "README.txt");
-            if (!dllReadme.exists()) {
-                try (java.io.FileWriter writer = new java.io.FileWriter(dllReadme)) {
-                    writer.write("=== TerrariaLoader - DLL Mods ===\n\n");
-                    writer.write("Place your .dll mod files here.\n");
-                    writer.write("Requires MelonLoader to be installed.\n\n");
-                    writer.write("Supported formats:\n");
-                    writer.write("• .dll files (enabled)\n");
-                    writer.write("• .dll.disabled files (disabled)\n\n");
-                    writer.write("Path: " + dllReadme.getParentFile().getAbsolutePath() + "\n");
-                }
-            }
-            
-            // DEX Mods README
-            File dexReadme = new File(getDexModsDir(context, gamePackage), "README.txt");
-            if (!dexReadme.exists()) {
-                try (java.io.FileWriter writer = new java.io.FileWriter(dexReadme)) {
-                    writer.write("=== TerrariaLoader - DEX/JAR Mods ===\n\n");
-                    writer.write("Place your .dex and .jar mod files here.\n");
-                    writer.write("These are Java-based mods for Android.\n\n");
-                    writer.write("Supported formats:\n");
-                    writer.write("• .dex files (enabled)\n");
-                    writer.write("• .jar files (enabled)\n");
-                    writer.write("• .dex.disabled files (disabled)\n");
-                    writer.write("• .jar.disabled files (disabled)\n\n");
-                    writer.write("Path: " + dexReadme.getParentFile().getAbsolutePath() + "\n");
-                }
-            }
-            
-            // FIXED: Plugins README
+            // Main plugins README
             File pluginsReadme = new File(getPluginsDir(context, gamePackage), "README.txt");
             if (!pluginsReadme.exists()) {
                 try (java.io.FileWriter writer = new java.io.FileWriter(pluginsReadme)) {
-                    writer.write("=== MelonLoader Plugins Directory ===\n\n");
-                    writer.write("This directory contains MelonLoader plugins.\n");
-                    writer.write("Plugins extend MelonLoader functionality.\n\n");
-                    writer.write("Files you might see here:\n");
-                    writer.write("• .dll plugin files\n");
-                    writer.write("• Plugin configuration files\n\n");
-                    writer.write("Path: " + pluginsReadme.getParentFile().getAbsolutePath() + "\n");
+                    writer.write("=== ModLoader Plugin System ===\n\n");
+                    writer.write("This directory contains the plugin system files.\n\n");
+                    writer.write("Directory Structure:\n");
+                    writer.write("• /Plugins/ - Main plugin files (.jar, .dex)\n");
+                    writer.write("• /Storage/ - Plugin persistent data\n");
+                    writer.write("• /Config/ - Plugin configuration files\n");
+                    writer.write("• /Temp/ - Temporary plugin files\n");
+                    writer.write("• /Backups/ - Plugin backups\n");
+                    writer.write("• /Logs/ - Plugin execution logs\n");
+                    writer.write("• /Cache/ - Plugin cache data\n");
+                    writer.write("• /Sandbox/ - Isolated plugin execution\n\n");
+                    writer.write("For more information, see the Plugin Management UI.\n");
                 }
+                LogUtils.logDebug("Created plugins README file");
             }
-            
-            // FIXED: UserLibs README
-            File userlibsReadme = new File(getUserLibsDir(context, gamePackage), "README.txt");
-            if (!userlibsReadme.exists()) {
-                try (java.io.FileWriter writer = new java.io.FileWriter(userlibsReadme)) {
-                    writer.write("=== MelonLoader UserLibs Directory ===\n\n");
-                    writer.write("This directory contains user libraries.\n");
-                    writer.write("Libraries that mods depend on go here.\n\n");
-                    writer.write("Files you might see here:\n");
-                    writer.write("• .dll library files\n");
-                    writer.write("• Shared mod dependencies\n\n");
-                    writer.write("Path: " + userlibsReadme.getParentFile().getAbsolutePath() + "\n");
+
+            // Plugin storage README
+            File storageReadme = new File(getPluginStorageDir(context, gamePackage), "README.txt");
+            if (!storageReadme.exists()) {
+                try (java.io.FileWriter writer = new java.io.FileWriter(storageReadme)) {
+                    writer.write("=== Plugin Storage Directory ===\n\n");
+                    writer.write("This directory stores persistent plugin data.\n");
+                    writer.write("Each plugin gets its own subdirectory here.\n\n");
+                    writer.write("Plugins can store:\n");
+                    writer.write("• Configuration files\n");
+                    writer.write("• User data\n");
+                    writer.write("• Downloaded content\n");
+                    writer.write("• Cached resources\n\n");
+                    writer.write("Do not modify files here unless you know what you're doing.\n");
                 }
+                LogUtils.logDebug("Created plugin storage README file");
             }
-            
-            // FIXED: Game logs README
-            File gameLogsReadme = new File(getLogsDir(context, gamePackage), "README.txt");
-            if (!gameLogsReadme.exists()) {
-                try (java.io.FileWriter writer = new java.io.FileWriter(gameLogsReadme)) {
-                    writer.write("=== MelonLoader Game Logs ===\n\n");
-                    writer.write("This directory contains logs from MelonLoader and mods.\n");
-                    writer.write("These are generated when running the patched game.\n\n");
-                    writer.write("Log files follow rotation:\n");
-                    writer.write("• Log.txt (current log)\n");
-                    writer.write("• Log1.txt to Log5.txt (previous logs)\n");
-                    writer.write("• Oldest logs are automatically deleted\n\n");
-                    writer.write("Path: " + gameLogsReadme.getParentFile().getAbsolutePath() + "\n");
-                }
-            }
-            
-            // FIXED: App logs README
-            File appLogsReadme = new File(getAppLogsDir(context, gamePackage), "README.txt");
-            if (!appLogsReadme.exists()) {
-                try (java.io.FileWriter writer = new java.io.FileWriter(appLogsReadme)) {
-                    writer.write("=== TerrariaLoader App Logs ===\n\n");
-                    writer.write("This directory contains logs from TerrariaLoader app.\n");
-                    writer.write("These are generated when using this app.\n\n");
-                    writer.write("Log files follow rotation:\n");
-                    writer.write("• AppLog.txt (current log)\n");
-                    writer.write("• AppLog1.txt to AppLog5.txt (previous logs)\n");
-                    writer.write("• Oldest logs are automatically deleted\n\n");
-                    writer.write("Path: " + appLogsReadme.getParentFile().getAbsolutePath() + "\n");
-                }
-            }
-            
+
         } catch (Exception e) {
-            LogUtils.logDebug("Error creating README files: " + e.getMessage());
+            LogUtils.logDebug("Error creating plugin info files: " + e.getMessage());
         }
     }
-    
+
+    // ===== MIGRATION METHODS =====
+
     /**
-     * FIXED: Get standardized path string for logging/display
-     */
-    public static String getPathInfo(Context context, String gamePackage) {
-        StringBuilder info = new StringBuilder();
-        info.append("=== TerrariaLoader Directory Structure ===\n");
-        info.append("Base: ").append(getTerrariaLoaderBaseDir(context).getAbsolutePath()).append("\n");
-        info.append("Game: ").append(getGameBaseDir(context, gamePackage).getAbsolutePath()).append("\n");
-        info.append("DLL Mods: ").append(getDllModsDir(context, gamePackage).getAbsolutePath()).append("\n");
-        info.append("DEX Mods: ").append(getDexModsDir(context, gamePackage).getAbsolutePath()).append("\n");
-        info.append("MelonLoader: ").append(getMelonLoaderDir(context, gamePackage).getAbsolutePath()).append("\n");
-        info.append("Plugins: ").append(getPluginsDir(context, gamePackage).getAbsolutePath()).append("\n");
-        info.append("UserLibs: ").append(getUserLibsDir(context, gamePackage).getAbsolutePath()).append("\n");
-        info.append("Game Logs: ").append(getLogsDir(context, gamePackage).getAbsolutePath()).append("\n");
-        info.append("App Logs: ").append(getAppLogsDir(context, gamePackage).getAbsolutePath()).append("\n");
-        return info.toString();
-    }
-    
-    /**
-     * Check if legacy structure exists and needs migration
+     * Check if migration is needed from legacy structure
      */
     public static boolean needsMigration(Context context) {
-        File legacyMods = getLegacyModsDir(context);
-        File legacyAppLogs = getLegacyAppLogsDir(context);
-        File newStructure = getTerrariaBaseDir(context);
-        
-        return ((legacyMods.exists() && legacyMods.listFiles() != null && legacyMods.listFiles().length > 0) ||
-                (legacyAppLogs.exists() && legacyAppLogs.listFiles() != null && legacyAppLogs.listFiles().length > 0)) && 
-               !newStructure.exists();
+        File legacyDir = getLegacyModsDir(context);
+        return legacyDir != null && legacyDir.exists() && legacyDir.listFiles() != null && legacyDir.listFiles().length > 0;
     }
-    
+
     /**
-     * FIXED: Migrate from legacy structure to new structure
+     * Migrate from legacy directory structure
      */
     public static boolean migrateLegacyStructure(Context context) {
         if (!needsMigration(context)) {
+            LogUtils.logDebug("No migration needed");
             return true;
         }
-        
+
         LogUtils.logUser("Migrating from legacy directory structure...");
         
-        try {
-            String gamePackage = "com.and.games505.TerrariaPaid";
-            
-            // Initialize new structure
-            if (!initializeGameDirectories(context, gamePackage)) {
-                LogUtils.logDebug("Failed to initialize new directory structure");
-                return false;
-            }
-            
-            // Migrate mods
-            File legacyModsDir = getLegacyModsDir(context);
-            File newDexMods = getDexModsDir(context, gamePackage);
-            
-            if (legacyModsDir.exists()) {
-                File[] modFiles = legacyModsDir.listFiles();
-                if (modFiles != null) {
-                    int migratedCount = 0;
-                    for (File modFile : modFiles) {
-                        if (modFile.isFile()) {
-                            File newLocation = new File(newDexMods, modFile.getName());
-                            if (modFile.renameTo(newLocation)) {
-                                migratedCount++;
-                            }
-                        }
-                    }
-                    LogUtils.logUser("Migrated " + migratedCount + " mod files to new structure");
-                }
-            }
-            
-            // Migrate legacy app logs
-            File legacyAppLogs = getLegacyAppLogsDir(context);
-            File newAppLogs = getAppLogsDir(context, gamePackage);
-            
-            if (legacyAppLogs.exists()) {
-                File[] logFiles = legacyAppLogs.listFiles((dir, name) -> 
-                    name.endsWith(".txt") || name.startsWith("auto_save_"));
-                
-                if (logFiles != null && logFiles.length > 0) {
-                    LogUtils.logUser("Migrating " + logFiles.length + " legacy log files...");
-                    
-                    if (!newAppLogs.exists()) {
-                        newAppLogs.mkdirs();
-                    }
-                    
-                    int migratedLogCount = 0;
-                    for (File logFile : logFiles) {
-                        // Rename to new format
-                        String newName = "AppLog" + (migratedLogCount + 1) + ".txt";
-                        File newLocation = new File(newAppLogs, newName);
-                        
-                        if (logFile.renameTo(newLocation)) {
-                            migratedLogCount++;
-                        }
-                    }
-                    LogUtils.logUser("Migrated " + migratedLogCount + " log files to new structure");
-                }
-            }
-            
-            LogUtils.logUser("✅ Migration completed successfully");
-            return true;
-            
-        } catch (Exception e) {
-            LogUtils.logDebug("Migration failed: " + e.getMessage());
+        // Initialize new structure first
+        if (!initializeGameDirectories(context, TERRARIA_PACKAGE)) {
+            LogUtils.logUser("❌ Failed to initialize new directory structure");
             return false;
         }
+
+        // Migration logic would go here
+        // This is handled by ModInstaller.migrateLegacyMods()
+        
+        return true;
     }
+
+    // ===== INFORMATION METHODS =====
+
+    /**
+     * Get detailed path information for debugging
+     */
+    public static String getPathInfo(Context context, String gamePackage) {
+        if (context == null || gamePackage == null) return "Context or gamePackage is null";
+
+        StringBuilder info = new StringBuilder();
+        info.append("=== Path Information ===\n");
+        info.append("Game Package: ").append(gamePackage).append("\n");
+        info.append("Base Directory: ").append(getAppBaseDir(context).getAbsolutePath()).append("\n");
+        info.append("Game Directory: ").append(getGameBaseDir(context, gamePackage).getAbsolutePath()).append("\n\n");
+
+        // Mod directories
+        info.append("Mod Directories:\n");
+        info.append("• DEX Mods: ").append(getDexModsDir(context, gamePackage).getAbsolutePath()).append("\n");
+        info.append("• DLL Mods: ").append(getDllModsDir(context, gamePackage).getAbsolutePath()).append("\n\n");
+
+        // Loader directories
+        info.append("Loader Directories:\n");
+        info.append("• MelonLoader: ").append(getMelonLoaderDir(context, gamePackage).getAbsolutePath()).append("\n");
+        info.append("• NET8: ").append(getMelonLoaderNet8Dir(context, gamePackage).getAbsolutePath()).append("\n");
+        info.append("• NET35: ").append(getMelonLoaderNet35Dir(context, gamePackage).getAbsolutePath()).append("\n\n");
+
+        // Plugin directories
+        info.append("Plugin Directories:\n");
+        info.append("• Plugins: ").append(getPluginsDir(context, gamePackage).getAbsolutePath()).append("\n");
+        info.append("• Storage: ").append(getPluginStorageDir(context, gamePackage).getAbsolutePath()).append("\n");
+        info.append("• Config: ").append(getPluginConfigDir(context, gamePackage).getAbsolutePath()).append("\n");
+        info.append("• Sandbox: ").append(getPluginSandboxDir(context, gamePackage).getAbsolutePath()).append("\n\n");
+
+        // Utility directories
+        info.append("Utility Directories:\n");
+        info.append("• Logs: ").append(getLogsDir(context, gamePackage).getAbsolutePath()).append("\n");
+        info.append("• App Logs: ").append(getAppLogsDir(context, gamePackage).getAbsolutePath()).append("\n");
+        info.append("• Backups: ").append(getBackupsDir(context, gamePackage).getAbsolutePath()).append("\n");
+        info.append("• Config: ").append(getConfigDir(context, gamePackage).getAbsolutePath()).append("\n");
+
+        return info.toString();
+    }
+
+    /**
+     * Get directory statistics
+     */
+    public static String getDirectoryStats(Context context, String gamePackage) {
+        if (context == null || gamePackage == null) return "Invalid parameters";
+
+        StringBuilder stats = new StringBuilder();
+        stats.append("=== Directory Statistics ===\n");
+
+        List<File> allDirectories = getAllRequiredDirectories(context, gamePackage);
+        int existingCount = 0;
+        long totalSize = 0;
+
+        for (File dir : allDirectories) {
+            if (dir.exists()) {
+                existingCount++;
+                totalSize += calculateDirectorySize(dir);
+            }
+        }
+
+        stats.append("Total Directories: ").append(allDirectories.size()).append("\n");
+        stats.append("Existing Directories: ").append(existingCount).append("\n");
+        stats.append("Total Size: ").append(FileUtils.formatFileSize(totalSize)).append("\n");
+
+        return stats.toString();
+    }
+
+    /**
+     * Calculate directory size recursively
+     */
+    private static long calculateDirectorySize(File directory) {
+        long size = 0;
+        if (directory != null && directory.exists()) {
+            try {
+                File[] files = directory.listFiles();
+                if (files != null) {
+                    for (File file : files) {
+                        if (file.isDirectory()) {
+                            size += calculateDirectorySize(file);
+                        } else {
+                            size += file.length();
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                LogUtils.logDebug("Error calculating size for: " + directory.getAbsolutePath());
+            }
+        }
+        return size;
+    }
+
+    // ===== CLEANUP METHODS =====
+
+    /**
+     * Clean up temporary plugin files
+     */
+    public static void cleanupPluginTemp(Context context, String gamePackage) {
+        File tempDir = getPluginTempDir(context, gamePackage);
+        if (tempDir != null && tempDir.exists()) {
+            try {
+                File[] tempFiles = tempDir.listFiles();
+                if (tempFiles != null) {
+                    int deletedCount = 0;
+                    for (File file : tempFiles) {
+                        if (file.delete()) {
+                            deletedCount++;
+                        }
+                    }
+                    if (deletedCount > 0) {
+                        LogUtils.logDebug("Cleaned up " + deletedCount + " temporary plugin files");
+                    }
+                }
+            } catch (Exception e) {
+                LogUtils.logDebug("Error cleaning up plugin temp files: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Clean up plugin cache files older than specified days
+     */
+    public static void cleanupPluginCache(Context context, String gamePackage, int maxDays) {
+        File cacheDir = getPluginCacheDir(context, gamePackage);
+        if (cacheDir != null && cacheDir.exists()) {
+            try {
+                long cutoffTime = System.currentTimeMillis() - (maxDays * 24L * 60L * 60L * 1000L);
+                File[] cacheFiles = cacheDir.listFiles();
+                if (cacheFiles != null) {
+                    int deletedCount = 0;
+                    for (File file : cacheFiles) {
+                        if (file.lastModified() < cutoffTime && file.delete()) {
+                            deletedCount++;
+                        }
+                    }
+                    if (deletedCount > 0) {
+                        LogUtils.logDebug("Cleaned up " + deletedCount + " old plugin cache files");
+                    }
+                }
+            } catch (Exception e) {
+                LogUtils.logDebug("Error cleaning up plugin cache: " + e.getMessage());
+            }
+        }
+    }
+
 }
 
-
-/ModLoader/app/src/main/java/com/modloader/util/PermissionManager.java
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/java/com/modloader/util/PermissionManager.java
 
 // File: PermissionManager.java (COMPLETE FIXED) - No Syntax Errors
 // Path: /app/src/main/java/com/modloader/util/PermissionManager.java
@@ -3001,7 +3116,7 @@ public class PermissionManager {
             if (activity != null) {
                 new AlertDialog.Builder(activity)
                     .setTitle("🗂️ All Files Access Required")
-                    .setMessage("TerrariaLoader needs access to all files to:\n\n" +
+                    .setMessage("ModLoader needs access to all files to:\n\n" +
                         "• Create and manage mod directories\n" +
                         "• Install and patch APK files\n" +
                         "• Backup and restore game data\n\n" +
@@ -3534,8 +3649,7 @@ public class PermissionManager {
     }
 }
 
-
-/ModLoader/app/src/main/java/com/modloader/util/PrivilegeManager.java
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/java/com/modloader/util/PrivilegeManager.java
 
 package com.modloader.util;
 
@@ -3543,8 +3657,7 @@ public class PrivilegeManager {
 }
 
 
-
-/ModLoader/app/src/main/java/com/modloader/util/RootManager.java
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/java/com/modloader/util/RootManager.java
 
 // File: RootManager.java (FIXED) - Complete Root Access Management
 // Path: /app/src/main/java/com/modloader/util/RootManager.java
@@ -4287,8 +4400,7 @@ public class RootManager {
     }
 }
 
-
-/ModLoader/app/src/main/java/com/modloader/util/ShizukuManager.java
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/java/com/modloader/util/ShizukuManager.java
 
 // File: ShizukuManager.java (FIXED) - Complete Shizuku Integration with Proper Permission Detection
 // Path: /app/src/main/java/com/modloader/util/ShizukuManager.java
@@ -4613,7 +4725,7 @@ public class ShizukuManager {
             if (intent.resolveActivity(context.getPackageManager()) != null) {
                 context.startActivity(intent);
                 LogUtils.logUser("📱 Opened Shizuku app - grant permission manually");
-                showToast("Grant permission to TerrariaLoader in Shizuku settings");
+                showToast("Grant permission to ModLoader in Shizuku settings");
             } else {
                 // Try alternative package
                 intent.setPackage("moe.shizuku.manager");
@@ -4641,10 +4753,10 @@ public class ShizukuManager {
             builder.setMessage("Please grant permission manually:\n\n" +
                 "1. Open Shizuku app\n" +
                 "2. Go to 'Applications using Shizuku API'\n" +
-                "3. Find 'TerrariaLoader' in the list\n" +
+                "3. Find 'ModLoader' in the list\n" +
                 "4. Toggle the permission ON\n" +
-                "5. Return to TerrariaLoader\n\n" +
-                "If TerrariaLoader is not in the list, restart the app and try again.");
+                "5. Return to ModLoader\n\n" +
+                "If ModLoader is not in the list, restart the app and try again.");
             builder.setPositiveButton("Open Shizuku", (dialog, which) -> openShizukuApp());
             builder.setNegativeButton("OK", null);
             builder.show();
@@ -4859,8 +4971,7 @@ public class ShizukuManager {
     }
 } 
 
-
-/ModLoader/app/src/main/res/drawable/circle_shape.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/drawable/circle_shape.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
@@ -4871,8 +4982,7 @@ public class ShizukuManager {
         android:color="#2E7D32" />
 </shape>
 
-
-/ModLoader/app/src/main/res/drawable/gradient_background_135.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/drawable/gradient_background_135.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
@@ -4883,8 +4993,7 @@ public class ShizukuManager {
         android:type="linear" />
 </shape>
 
-
-/ModLoader/app/src/main/res/drawable/ic_arrow_back.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/drawable/ic_arrow_back.xml
 
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
@@ -4897,8 +5006,7 @@ public class ShizukuManager {
 </vector>
 
 
-
-/ModLoader/app/src/main/res/drawable/ic_launcher_background.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/drawable/ic_launcher_background.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
@@ -5072,8 +5180,7 @@ public class ShizukuManager {
 </vector>
 
 
-
-/ModLoader/app/src/main/res/drawable/rounded_edittext_background.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/drawable/rounded_edittext_background.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
@@ -5090,8 +5197,7 @@ public class ShizukuManager {
         android:bottom="8dp" />
 </shape>
 
-
-/ModLoader/app/src/main/res/drawable/rounded_spinner_background.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/drawable/rounded_spinner_background.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
@@ -5108,8 +5214,7 @@ public class ShizukuManager {
         android:bottom="12dp" />
 </shape>
 
-
-/ModLoader/app/src/main/res/drawable-v24/ic_launcher_foreground.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/drawable-v24/ic_launcher_foreground.xml
 
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
@@ -5142,8 +5247,7 @@ public class ShizukuManager {
         android:strokeColor="#00000000" />
 </vector>
 
-
-/ModLoader/app/src/main/res/layout/activity_about.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/activity_about.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
@@ -5181,8 +5285,7 @@ public class ShizukuManager {
     </LinearLayout>
 </ScrollView>
 
-
-/ModLoader/app/src/main/res/layout/activity_dll_mod.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/activity_dll_mod.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -5332,8 +5435,7 @@ public class ShizukuManager {
 
 </ScrollView>
 
-
-/ModLoader/app/src/main/res/layout/activity_instructions.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/activity_instructions.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -5377,8 +5479,7 @@ public class ShizukuManager {
 </ScrollView>
 
 
-
-/ModLoader/app/src/main/res/layout/activity_log.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/activity_log.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -5413,8 +5514,7 @@ public class ShizukuManager {
         android:text="Export Logs" />
 </LinearLayout>
 
-
-/ModLoader/app/src/main/res/layout/activity_log_viewer_enhanced.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/activity_log_viewer_enhanced.xml
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -5655,33 +5755,93 @@ public class ShizukuManager {
 
 </LinearLayout>
 
-
-/ModLoader/app/src/main/res/layout/activity_main.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/activity_main.xml
 
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="24dp">
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:gravity="center"
+     android:padding="16dp"
+     android:orientation="vertical">
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="32dp"
+         android:gravity="center"
+         android:textSize="28sp"
+         android:textColor="#2E7D32"
+         android:text="Mod Loader"
+         android:textStyle="bold" />
 
     <Button
-        android:id="@+id/universal_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Universal"
-        android:layout_marginBottom="16dp" />
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="16dp"
+         android:background="#2196F3"
+         android:minHeight="56dp"
+         android:elevation="4dp"
+         android:textSize="16sp"
+         android:textColor="@android:color/white"
+         android:id="@+id/universal_button"
+         android:text="Universal Mode" />
 
     <Button
-        android:id="@+id/specific_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Specific Version" />
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="16dp"
+         android:background="#4CAF50"
+         android:minHeight="56dp"
+         android:elevation="4dp"
+         android:textSize="16sp"
+         android:textColor="@android:color/white"
+         android:id="@+id/specific_button"
+         android:text="Specific Mode" />
+
+    <Button
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="32dp"
+         android:background="#9C27B0"
+         android:minHeight="56dp"
+         android:elevation="4dp"
+         android:textSize="16sp"
+         android:textColor="@android:color/white"
+         android:id="@+id/plugin_button"
+         android:text="Plugin Management" />
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:background="#F5F5F5"
+         android:elevation="2dp"
+         android:padding="16dp"
+         android:orientation="vertical"
+         android:layout_marginTop="16dp">
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="8dp"
+             android:textSize="16sp"
+             android:text="Choose Your Mode:"
+             android:textStyle="bold" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:textSize="14sp"
+             android:textColor="#666666"
+             android:lineSpacingExtra="4dp"
+             android:text="• Universal: Inject loaders into any APK\n• Specific: Game-specific modding tools\n• Plugin Management: Manage plugin system" />
+
+    </LinearLayout>
+
 </LinearLayout>
 
-
-/ModLoader/app/src/main/res/layout/activity_mod_list.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/activity_mod_list.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -5749,8 +5909,7 @@ public class ShizukuManager {
 </LinearLayout>
 
 
-
-/ModLoader/app/src/main/res/layout/activity_mod_management.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/activity_mod_management.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -5836,7 +5995,7 @@ public class ShizukuManager {
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="• DLL mods will be loaded by MelonLoader\n• DEX/JAR mods are loaded directly by TerrariaLoader\n• Enable/disable mods using the switches below"
+                android:text="• DLL mods will be loaded by MelonLoader\n• DEX/JAR mods are loaded directly by ModLoader\n• Enable/disable mods using the switches below"
                 android:textSize="12sp"
                 android:textColor="#1976D2"
                 android:lineSpacingExtra="2dp" />
@@ -6014,8 +6173,7 @@ public class ShizukuManager {
 
 </ScrollView>
 
-
-/ModLoader/app/src/main/res/layout/activity_offline_diagnostic.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/activity_offline_diagnostic.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <!-- File: activity_offline_diagnostic.xml -->
@@ -6037,7 +6195,7 @@ public class ShizukuManager {
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TerrariaLoader Offline Diagnostics"
+            android:text="ModLoader Offline Diagnostics"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@android:color/holo_green_dark"
@@ -6231,7 +6389,7 @@ public class ShizukuManager {
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TerrariaLoader Diagnostic Tool v1.0 - Offline Mode"
+            android:text="ModLoader Diagnostic Tool v1.0 - Offline Mode"
             android:textSize="12sp"
             android:textColor="@android:color/darker_gray"
             android:gravity="center"
@@ -6241,8 +6399,7 @@ public class ShizukuManager {
     </LinearLayout>
 </ScrollView>
 
-
-/ModLoader/app/src/main/res/layout/activity_plugin_config.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/activity_plugin_config.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <!-- File: activity_plugin_config.xml - Plugin Configuration Layout -->
@@ -6382,8 +6539,7 @@ public class ShizukuManager {
 
 </LinearLayout>
 
-
-/ModLoader/app/src/main/res/layout/activity_plugin_install.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/activity_plugin_install.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <!-- File: activity_plugin_install.xml - Plugin Installation Layout -->
@@ -6588,7 +6744,7 @@ public class ShizukuManager {
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="• Valid .jar plugin file\n• Storage permission for plugin data\n• TerrariaLoader v1.0+ compatibility\n• Sufficient device memory"
+                    android:text="• Valid .jar plugin file\n• Storage permission for plugin data\n• ModLoader v1.0+ compatibility\n• Sufficient device memory"
                     android:textSize="14sp"
                     android:textColor="#1976D2"
                     android:lineSpacingExtra="4dp" />
@@ -6650,129 +6806,120 @@ public class ShizukuManager {
 
 </ScrollView>
 
-
-/ModLoader/app/src/main/res/layout/activity_plugin_management.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/activity_plugin_management.xml
 
 <?xml version="1.0" encoding="utf-8"?>
-<!-- File: activity_plugin_management.xml - Plugin Management Layout -->
-<!-- Path: /app/src/main/res/layout/activity_plugin_management.xml -->
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:background="#F5F5F5"
+     android:orientation="vertical">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#F5F5F5">
-
-    <!-- Header Section -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#2E7D32"
-        android:padding="16dp"
-        android:elevation="4dp">
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:background="#2E7D32"
+         android:elevation="4dp"
+         android:padding="16dp"
+         android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="🔌 Plugin Management"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:gravity="center"
-            android:layout_marginBottom="8dp" />
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="8dp"
+             android:gravity="center"
+             android:textSize="24sp"
+             android:textColor="#FFFFFF"
+             android:text="🔌 Plugin Management"
+             android:textStyle="bold" />
 
-        <!-- Status Text -->
         <TextView
-            android:id="@+id/statusText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Loading plugins..."
-            android:textSize="14sp"
-            android:textColor="#E8F5E8"
-            android:gravity="center"
-            android:layout_marginBottom="8dp" />
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="8dp"
+             android:gravity="center"
+             android:textSize="14sp"
+             android:textColor="#E8F5E8"
+             android:id="@+id/statusText"
+             android:text="Loading plugins..." />
 
-        <!-- Plugin Count -->
         <TextView
-            android:id="@+id/pluginCountText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Total: 0 | Loaded: 0 | Active: 0"
-            android:textSize="12sp"
-            android:textColor="#C8E6C9"
-            android:gravity="center" />
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:gravity="center"
+             android:textSize="12sp"
+             android:textColor="#C8E6C9"
+             android:id="@+id/pluginCountText"
+             android:text="Total: 0 | Loaded: 0 | Active: 0" />
 
     </LinearLayout>
 
-    <!-- Action Buttons -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="12dp"
-        android:background="#FFFFFF"
-        android:elevation="2dp">
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:background="#FFFFFF"
+         android:elevation="2dp"
+         android:padding="12dp"
+         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/installPluginButton"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:text="📥 Install Plugin"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:background="#4CAF50"
-            android:textColor="#FFFFFF"
-            android:layout_marginEnd="8dp"
-            android:elevation="2dp" />
+             android:layout_height="48dp"
+             android:layout_width="0dp"
+             android:layout_marginEnd="8dp"
+             android:background="#4CAF50"
+             android:elevation="2dp"
+             android:textSize="14sp"
+             android:textColor="#FFFFFF"
+             android:layout_weight="1"
+             android:id="@+id/installPluginButton"
+             android:text="🔌📥 Install Plugin"
+             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/scanButton"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:text="🔍 Scan"
-            android:textSize="14sp"
-            android:background="#2196F3"
-            android:textColor="#FFFFFF"
-            android:layout_marginEnd="8dp"
-            android:elevation="2dp" />
+             android:layout_height="48dp"
+             android:layout_width="0dp"
+             android:layout_marginEnd="8dp"
+             android:background="#2196F3"
+             android:elevation="2dp"
+             android:textSize="14sp"
+             android:textColor="#FFFFFF"
+             android:layout_weight="1"
+             android:id="@+id/scanButton"
+             android:text="🔌📥🔍 Scan" />
 
         <Button
-            android:id="@+id/refreshButton"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:text="🔄 Refresh"
-            android:textSize="14sp"
-            android:background="#FF9800"
-            android:textColor="#FFFFFF"
-            android:elevation="2dp" />
+             android:layout_height="48dp"
+             android:layout_width="0dp"
+             android:background="#FF9800"
+             android:elevation="2dp"
+             android:textSize="14sp"
+             android:textColor="#FFFFFF"
+             android:layout_weight="1"
+             android:id="@+id/refreshButton"
+             android:text="🔌📥🔍🔄 Refresh" />
 
     </LinearLayout>
 
-    <!-- Main Content -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:id="@+id/swipeRefreshLayout">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/pluginRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="8dp"
-            android:clipToPadding="false"
-            android:scrollbars="vertical" />
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             android:scrollbars="vertical"
+             android:padding="8dp"
+             android:clipToPadding="false"
+             android:id="@+id/pluginRecyclerView" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>
 
-
-/ModLoader/app/src/main/res/layout/activity_settings_enhanced.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/activity_settings_enhanced.xml
 
 <!-- File: activity_settings_enhanced.xml (Enhanced Settings Layout - Error-Free) -->
 <!-- Path: /app/src/main/res/layout/activity_settings_enhanced.xml -->
@@ -6793,7 +6940,7 @@ public class ShizukuManager {
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="⚙️ TerrariaLoader Settings"
+            android:text="⚙️ ModLoader Settings"
             android:textSize="24sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -6813,7 +6960,7 @@ public class ShizukuManager {
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Choose how TerrariaLoader operates:"
+            android:text="Choose how ModLoader operates:"
             android:textSize="14sp"
             android:layout_marginBottom="16dp"
             android:textColor="#666666" />
@@ -7315,7 +7462,7 @@ public class ShizukuManager {
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TerrariaLoader v1.0 - Enhanced Edition"
+            android:text="ModLoader v1.0 - Enhanced Edition"
             android:textSize="12sp"
             android:gravity="center"
             android:layout_marginTop="16dp"
@@ -7325,8 +7472,7 @@ public class ShizukuManager {
 
 </ScrollView>
 
-
-/ModLoader/app/src/main/res/layout/activity_setup_guide.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/activity_setup_guide.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -7609,8 +7755,7 @@ public class ShizukuManager {
 
 </ScrollView>
 
-
-/ModLoader/app/src/main/res/layout/activity_specific_selection.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/activity_specific_selection.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 
@@ -7759,14 +7904,16 @@ public class ShizukuManager {
     </LinearLayout>
 </ScrollView>
 
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/activity_terraria_specific_updated.xml
 
-/ModLoader/app/src/main/res/layout/activity_terraria_specific_updated.xml
+<!-- File: activity_terraria_specific_updated.xml - Complete Fixed Layout with Plugin Management Section -->
+<!-- Path: /main/res/layout/activity_terraria_specific_updated.xml -->
 
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
     <LinearLayout
         android:id="@+id/rootLayout"
@@ -7805,6 +7952,7 @@ public class ShizukuManager {
                 android:padding="12dp"
                 android:background="#F1F8E9"
                 android:layout_marginTop="8dp" />
+
         </LinearLayout>
 
         <!-- Setup & Installation Section -->
@@ -7883,8 +8031,11 @@ public class ShizukuManager {
                         android:textColor="#2E7D32"
                         android:layout_marginStart="6dp"
                         android:minHeight="48dp" />
+
                 </LinearLayout>
+
             </LinearLayout>
+
         </androidx.cardview.widget.CardView>
 
         <!-- Mod Management Section -->
@@ -7941,6 +8092,7 @@ public class ShizukuManager {
                         android:textColor="@android:color/white"
                         android:layout_marginStart="6dp"
                         android:minHeight="48dp" />
+
                 </LinearLayout>
 
                 <TextView
@@ -7951,12 +8103,14 @@ public class ShizukuManager {
                     android:textColor="#42A5F5"
                     android:layout_marginTop="12dp"
                     android:lineSpacingExtra="2dp" />
+
             </LinearLayout>
+
         </androidx.cardview.widget.CardView>
 
-        <!-- Tools & Utilities Section -->
+        <!-- NEW: Plugin Management Section -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/toolsCard"
+            android:id="@+id/pluginCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -7973,10 +8127,92 @@ public class ShizukuManager {
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="🛠️ Tools &amp; Utilities"
+                    android:text="🔌 Plugin System"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="#7B1FA2"
+                    android:layout_marginBottom="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <Button
+                        android:id="@+id/pluginManagerButton"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="🎛️ Manager"
+                        android:textSize="12sp"
+                        android:background="#9C27B0"
+                        android:textColor="@android:color/white"
+                        android:layout_marginEnd="4dp"
+                        android:minHeight="44dp" />
+
+                    <Button
+                        android:id="@+id/pluginInstallButton"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="📦 Install"
+                        android:textSize="12sp"
+                        android:background="#BA68C8"
+                        android:textColor="@android:color/white"
+                        android:layout_marginHorizontal="4dp"
+                        android:minHeight="44dp" />
+
+                    <Button
+                        android:id="@+id/pluginConfigButton"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="⚙️ Config"
+                        android:textSize="12sp"
+                        android:background="#CE93D8"
+                        android:textColor="#4A148C"
+                        android:layout_marginStart="4dp"
+                        android:minHeight="44dp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="• Extend app functionality with dynamic plugins\n• Hot-swappable components with sandboxed execution\n• Custom mod loading and UI extensions"
+                    android:textSize="12sp"
+                    android:textColor="#8E24AA"
+                    android:layout_marginTop="12dp"
+                    android:lineSpacingExtra="2dp" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Tools & Utilities Section -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/toolsCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="#FFF3E0">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🛠️ Tools &amp; Utilities"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#F57F17"
                     android:layout_marginBottom="16dp" />
 
                 <LinearLayout
@@ -7992,7 +8228,7 @@ public class ShizukuManager {
                         android:layout_height="wrap_content"
                         android:text="📋 Logs"
                         android:textSize="12sp"
-                        android:background="#9C27B0"
+                        android:background="#FF9800"
                         android:textColor="@android:color/white"
                         android:layout_marginEnd="4dp"
                         android:minHeight="44dp" />
@@ -8004,7 +8240,7 @@ public class ShizukuManager {
                         android:layout_height="wrap_content"
                         android:text="⚙️ Settings"
                         android:textSize="12sp"
-                        android:background="#BA68C8"
+                        android:background="#FFB74D"
                         android:textColor="@android:color/white"
                         android:layout_marginHorizontal="4dp"
                         android:minHeight="44dp" />
@@ -8016,13 +8252,14 @@ public class ShizukuManager {
                         android:layout_height="wrap_content"
                         android:text="🧪 Sandbox"
                         android:textSize="12sp"
-                        android:background="#CE93D8"
-                        android:textColor="#4A148C"
+                        android:background="#FFCC02"
+                        android:textColor="#E65100"
                         android:layout_marginStart="4dp"
                         android:minHeight="44dp" />
+
                 </LinearLayout>
 
-                <!-- ✅ Fixed Diagnostic Button -->
+                <!-- Diagnostic Button -->
                 <Button
                     android:id="@+id/diagnosticButton"
                     android:layout_width="match_parent"
@@ -8030,11 +8267,13 @@ public class ShizukuManager {
                     android:text="🧪 Offline Diagnostic &amp; Repair"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:backgroundTint="#9C27B0"
+                    android:background="#FF6F00"
                     android:textColor="#FFFFFF"
                     android:layout_marginTop="12dp"
                     android:minHeight="48dp" />
+
             </LinearLayout>
+
         </androidx.cardview.widget.CardView>
 
         <!-- Navigation Section -->
@@ -8054,25 +8293,28 @@ public class ShizukuManager {
                 android:background="@android:color/transparent"
                 android:textColor="#666666"
                 android:minHeight="40dp" />
+
         </LinearLayout>
 
         <!-- Info Footer -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="💡 Tip: Start with 'Complete Setup Wizard' for the easiest experience!"
+            android:text="💡 Tip: Start with 'Complete Setup Wizard' for the easiest experience!\n🔌 New: Plugin System allows dynamic functionality extensions"
             android:textSize="12sp"
             android:textColor="#81C784"
             android:gravity="center"
             android:background="#F1F8E9"
             android:padding="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:lineSpacingExtra="4dp" />
+
     </LinearLayout>
+
 </ScrollView>
 
-
-/ModLoader/app/src/main/res/layout/activity_unified_loader.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/activity_unified_loader.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -8249,8 +8491,7 @@ public class ShizukuManager {
 
 </LinearLayout>
 
-
-/ModLoader/app/src/main/res/layout/activity_universal.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/activity_universal.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -8287,8 +8528,7 @@ public class ShizukuManager {
 
 </LinearLayout>
 
-
-/ModLoader/app/src/main/res/layout/dialog_log_settings.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/dialog_log_settings.xml
 
 <!-- File: dialog_log_settings.xml (NEW DIALOG) - Settings for Log Viewer -->
 <!-- Path: /main/res/layout/dialog_log_settings.xml -->
@@ -8367,8 +8607,7 @@ public class ShizukuManager {
 
 </LinearLayout>
 
-
-/ModLoader/app/src/main/res/layout/item_log_entry.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/item_log_entry.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -8453,8 +8692,7 @@ public class ShizukuManager {
 
 </LinearLayout>
 
-
-/ModLoader/app/src/main/res/layout/item_mod.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/item_mod.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -8517,8 +8755,7 @@ public class ShizukuManager {
 </androidx.cardview.widget.CardView>
 
 
-
-/ModLoader/app/src/main/res/layout/item_plugin.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/item_plugin.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
@@ -8701,8 +8938,7 @@ public class ShizukuManager {
 
 </androidx.cardview.widget.CardView>
 
-
-/ModLoader/app/src/main/res/layout/item_plugin_config.xml
+/storage/emulated/0/AndroidIDEProjects/ModLoader/ModLoader/app/src/main/res/layout/item_plugin_config.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
@@ -8837,405 +9073,3 @@ public class ShizukuManager {
 
 </androidx.cardview.widget.CardView>
 
-
-/ModLoader/app/src/main/res/layout/plugin_hooks_layout.xml
-
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F5F5F5">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <!-- Header -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="🔗 Plugin Hook Configuration"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="#2E7D32"
-            android:gravity="center"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Hook System Status Card -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#E8F5E8">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="🔧 Hook System Status"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#2E7D32"
-                    android:layout_marginBottom="8dp" />
-
-                <TextView
-                    android:id="@+id/hookStatusText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="✅ Hook system is active\n🔗 3 hooks registered\n⚡ 12 hook calls processed"
-                    android:textSize="14sp"
-                    android:textColor="#4CAF50"
-                    android:lineSpacingExtra="4dp" />
-
-                <Button
-                    android:id="@+id/refreshStatusButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:text="🔄 Refresh"
-                    android:textSize="12sp"
-                    android:background="#4CAF50"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginTop="8dp"
-                    android:minWidth="80dp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Available Hooks Card -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFFFFF">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="📋 Available Hooks"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#1976D2"
-                    android:layout_marginBottom="12dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="These hooks are available for plugins to use:"
-                    android:textSize="12sp"
-                    android:textColor="#666666"
-                    android:layout_marginBottom="8dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/availableHooksRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:background="#FAFAFA"
-                    android:padding="8dp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Active Hooks Card -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFFFFF">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="⚡ Active Hooks"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#FF6F00"
-                    android:layout_marginBottom="12dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Currently installed and active hooks:"
-                    android:textSize="12sp"
-                    android:textColor="#666666"
-                    android:layout_marginBottom="8dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/activeHooksRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:background="#FFF8E1"
-                    android:padding="8dp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Hook Performance Metrics -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#F3E5F5">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="📊 Hook Performance"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#7B1FA2"
-                    android:layout_marginBottom="12dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:id="@+id/totalHookCallsText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1,234"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:textColor="#7B1FA2" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Total Calls"
-                            android:textSize="12sp"
-                            android:textColor="#666666" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:id="@+id/avgExecutionTimeText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="2.3ms"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:textColor="#7B1FA2" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Avg Time"
-                            android:textSize="12sp"
-                            android:textColor="#666666" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:id="@+id/hookErrorsText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:textColor="#4CAF50" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Errors"
-                            android:textSize="12sp"
-                            android:textColor="#666666" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Hook Controls -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
-
-            <Button
-                android:id="@+id/refreshHooksButton"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="🔄 Refresh Hooks"
-                android:textSize="14sp"
-                android:background="#2196F3"
-                android:textColor="#FFFFFF"
-                android:layout_marginEnd="8dp"
-                android:minHeight="48dp" />
-
-            <Button
-                android:id="@+id/clearHookCacheButton"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="🗑️ Clear Cache"
-                android:textSize="14sp"
-                android:background="#FF9800"
-                android:textColor="#FFFFFF"
-                android:layout_marginStart="8dp"
-                android:minHeight="48dp" />
-        </LinearLayout>
-
-        <!-- Hook Documentation -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#E3F2FD">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="📖 Hook Documentation"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#1565C0"
-                    android:layout_marginBottom="8dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="• Hooks allow plugins to intercept and modify game events\n• Use registerHook() to install a hook callback\n• Hook callbacks receive parameters and can return modified values\n• Hooks are executed in the order they were registered\n• Failed hooks are automatically disabled to prevent crashes"
-                    android:textSize="14sp"
-                    android:textColor="#1976D2"
-                    android:lineSpacingExtra="4dp" />
-
-                <Button
-                    android:id="@+id/viewHookDocsButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:text="📚 View Full Documentation"
-                    android:textSize="12sp"
-                    android:background="#1976D2"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginTop="8dp"
-                    android:minWidth="120dp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Debug Section -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFEBEE">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="🐛 Debug &amp; Testing"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#C62828"
-                    android:layout_marginBottom="12dp" />
-
-                <CheckBox
-                    android:id="@+id/enableHookDebuggingCheckbox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Enable hook debugging (logs all hook calls)"
-                    android:textSize="14sp"
-                    android:textColor="#D32F2F"
-                    android:layout_marginBottom="8dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/testHooksButton"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="🧪 Test Hooks"
-                        android:textSize="12sp"
-                        android:background="#D32F2F"
-                        android:textColor="#FFFFFF"
-                        android:layout_marginEnd="8dp"
-                        android:minHeight="40dp" />
-
-                    <Button
-                        android:id="@+id/exportHookLogsButton"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="📤 Export Logs"
-                        android:textSize="12sp"
-                        android:background="#757575"
-                        android:textColor="#FFFFFF"
-                        android:layout_marginStart="8dp"
-                        android:minHeight="40dp" />
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
-</ScrollView>
