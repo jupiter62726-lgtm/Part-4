@@ -1,752 +1,5 @@
 
-
-===== ModLoader/app/src/main/java/com/modloader/util/RootManager.java =====
-
-// File: RootManager.java (FIXED) - Complete Root Access Management
-// Path: /app/src/main/java/com/modloader/util/RootManager.java
-
-package com.modloader.util;
-
-import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog;
-import android.app.Activity;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-public class RootManager {
-    private static final String TAG = "RootManager";
-    
-    // Common root binary locations
-    private static final String[] ROOT_BINARIES = {
-        "/system/bin/su",
-        "/system/xbin/su", 
-        "/sbin/su",
-        "/system/su",
-        "/vendor/bin/su"
-    };
-    
-    // Root management app packages
-    private static final String[] ROOT_APPS = {
-        "com.topjohnwu.magisk",           // Magisk
-        "eu.chainfire.supersu",           // SuperSU
-        "com.koushikdutta.superuser",     // Superuser
-        "com.noshufou.android.su",        // Superuser (older)
-        "com.thirdparty.superuser",       // SuperUser (CyanogenMod)
-        "me.phh.superuser"                // SuperUser (LineageOS)
-    };
-    
-    private final Context context;
-    private final Activity activity;
-    
-    // Root state tracking
-    private Boolean rootAvailable = null;
-    private Boolean rootGranted = null;
-    private String rootAppPackage = null;
-    private Process rootProcess = null;
-    private BufferedWriter rootWriter = null;
-    private BufferedReader rootReader = null;
-    
-    private RootCallback callback;
-    
-    public interface RootCallback {
-        void onRootAvailable(boolean available);
-        void onRootGranted(boolean granted);
-        void onRootCommandResult(String command, boolean success, String output);
-        void onRootError(String error);
-    }
-    
-    public RootManager(Context context) {
-        this.context = context;
-        this.activity = context instanceof Activity ? (Activity) context : null;
-        checkRootAvailability();
-    }
-    
-    public RootManager(Activity activity) {
-        this.context = activity;
-        this.activity = activity;
-        checkRootAvailability();
-    }
-    
-    public void setCallback(RootCallback callback) {
-        this.callback = callback;
-    }
-    
-    /**
-     * FIXED: Check if root access is available on this device
-     */
-    public boolean isRootAvailable() {
-        if (rootAvailable != null) {
-            return rootAvailable;
-        }
-        
-        LogUtils.logDebug("Checking root availability...");
-        
-        // Method 1: Check for su binary
-        boolean hasSuBinary = checkSuBinary();
-        
-        // Method 2: Check for root management apps
-        boolean hasRootApp = checkRootApps();
-        
-        // Method 3: Check build tags for test-keys
-        boolean hasTestKeys = checkBuildTags();
-        
-        // Method 4: Try to execute 'which su' command
-        boolean canExecuteSu = testSuExecution();
-        
-        rootAvailable = hasSuBinary || hasRootApp || hasTestKeys || canExecuteSu;
-        
-        LogUtils.logDebug("Root availability check:");
-        LogUtils.logDebug("- SU Binary: " + hasSuBinary);
-        LogUtils.logDebug("- Root App: " + hasRootApp);
-        LogUtils.logDebug("- Test Keys: " + hasTestKeys);
-        LogUtils.logDebug("- SU Execution: " + canExecuteSu);
-        LogUtils.logDebug("- Overall Available: " + rootAvailable);
-        
-        if (callback != null) {
-            callback.onRootAvailable(rootAvailable);
-        }
-        
-        return rootAvailable;
-    }
-    
-    /**
-     * Check for su binary in common locations
-     */
-    private boolean checkSuBinary() {
-        try {
-            for (String path : ROOT_BINARIES) {
-                File suFile = new File(path);
-                if (suFile.exists() && suFile.canExecute()) {
-                    LogUtils.logDebug("Found su binary at: " + path);
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            LogUtils.logDebug("Error checking su binaries: " + e.getMessage());
-        }
-        return false;
-    }
-    
-    /**
-     * Check for installed root management applications
-     */
-    private boolean checkRootApps() {
-        try {
-            PackageManager pm = context.getPackageManager();
-            for (String rootPackage : ROOT_APPS) {
-                try {
-                    ApplicationInfo appInfo = pm.getApplicationInfo(rootPackage, 0);
-                    if (appInfo != null) {
-                        LogUtils.logDebug("Found root app: " + rootPackage);
-                        rootAppPackage = rootPackage;
-                        return true;
-                    }
-                } catch (PackageManager.NameNotFoundException e) {
-                    // App not installed, continue checking
-                }
-            }
-        } catch (Exception e) {
-            LogUtils.logDebug("Error checking root apps: " + e.getMessage());
-        }
-        return false;
-    }
-    
-    /**
-     * Check build tags for test-keys (indicates custom ROM/rooted device)
-     */
-    private boolean checkBuildTags() {
-        try {
-            String buildTags = android.os.Build.TAGS;
-            return buildTags != null && buildTags.contains("test-keys");
-        } catch (Exception e) {
-            LogUtils.logDebug("Error checking build tags: " + e.getMessage());
-            return false;
-        }
-    }
-    
-    /**
-     * Test if su command can be executed
-     */
-    private boolean testSuExecution() {
-        try {
-            Process process = Runtime.getRuntime().exec("which su");
-            process.waitFor(2, TimeUnit.SECONDS);
-            int exitCode = process.exitValue();
-            return exitCode == 0;
-        } catch (Exception e) {
-            LogUtils.logDebug("Error testing su execution: " + e.getMessage());
-            return false;
-        }
-    }
-    
-    /**
-     * FIXED: Check if app has been granted root permission
-     */
-    public boolean hasRootPermission() {
-        if (rootGranted != null) {
-            return rootGranted;
-        }
-        
-        if (!isRootAvailable()) {
-            rootGranted = false;
-            return false;
-        }
-        
-        LogUtils.logDebug("Testing root permission...");
-        
-        // Try to execute a simple root command
-        String testResult = executeRootCommand("id", 3000);
-        rootGranted = testResult != null && testResult.contains("uid=0");
-        
-        LogUtils.logDebug("Root permission test result: " + rootGranted);
-        if (rootGranted) {
-            LogUtils.logUser("✅ Root permission granted");
-        } else {
-            LogUtils.logUser("❌ Root permission not granted");
-        }
-        
-        if (callback != null) {
-            callback.onRootGranted(rootGranted);
-        }
-        
-        return rootGranted;
-    }
-    
-    /**
-     * FIXED: Check if root is ready (available and granted)
-     */
-    public boolean isRootReady() {
-        boolean ready = isRootAvailable() && hasRootPermission();
-        LogUtils.logDebug("Root ready status: " + ready);
-        return ready;
-    }
-    
-    /**
-     * FIXED: Request root access from the user
-     */
-    public void requestRootAccess() {
-        if (!isRootAvailable()) {
-            LogUtils.logUser("❌ Root is not available on this device");
-            showToast("Root access is not available on this device");
-            return;
-        }
-        
-        if (hasRootPermission()) {
-            LogUtils.logUser("✅ Root permission already granted");
-            showToast("Root access already granted!");
-            return;
-        }
-        
-        LogUtils.logUser("🔐 Requesting root access...");
-        
-        // Try to get root access by executing a simple command
-        new Thread(() -> {
-            try {
-                String result = executeRootCommand("echo 'Root access granted'", 5000);
-                boolean success = result != null && result.contains("Root access granted");
-                
-                if (activity != null) {
-                    activity.runOnUiThread(() -> {
-                        if (success) {
-                            rootGranted = true;
-                            LogUtils.logUser("✅ Root access granted successfully!");
-                            showToast("Root access granted!");
-                            if (callback != null) {
-                                callback.onRootGranted(true);
-                            }
-                        } else {
-                            rootGranted = false;
-                            LogUtils.logUser("❌ Root access denied or failed");
-                            showRootRequestFailedDialog();
-                            if (callback != null) {
-                                callback.onRootGranted(false);
-                            }
-                        }
-                    });
-                }
-            } catch (Exception e) {
-                LogUtils.logDebug("Error requesting root access: " + e.getMessage());
-                if (activity != null) {
-                    activity.runOnUiThread(() -> {
-                        showToast("Error requesting root access");
-                        if (callback != null) {
-                            callback.onRootError(e.getMessage());
-                        }
-                    });
-                }
-            }
-        }).start();
-    }
-    
-    /**
-     * Show dialog when root request fails
-     */
-    private void showRootRequestFailedDialog() {
-        if (activity == null) return;
-        
-        new AlertDialog.Builder(activity)
-            .setTitle("❌ Root Access Failed")
-            .setMessage("Root access was denied or failed.\n\n" +
-                "Possible reasons:\n" +
-                "• Root permission was denied in the popup\n" +
-                "• Root management app is not properly configured\n" +
-                "• Device is not properly rooted\n\n" +
-                "Solutions:\n" +
-                "• Try again and grant permission\n" +
-                "• Check your root management app settings\n" +
-                "• Restart the device and try again")
-            .setPositiveButton("Try Again", (dialog, which) -> requestRootAccess())
-            .setNegativeButton("OK", null)
-            .show();
-    }
-    
-    /**
-     * FIXED: Execute shell command with root privileges
-     */
-    public String executeRootCommand(String command) {
-        return executeRootCommand(command, 10000); // Default 10 second timeout
-    }
-    
-    /**
-     * Execute shell command with root privileges and timeout
-     */
-    public String executeRootCommand(String command, long timeoutMs) {
-        if (!isRootAvailable()) {
-            LogUtils.logDebug("Cannot execute root command - root not available");
-            return null;
-        }
-        
-        LogUtils.logDebug("Executing root command: " + command);
-        
-        Process process = null;
-        BufferedReader reader = null;
-        BufferedWriter writer = null;
-        
-        try {
-            // Start su process
-            process = Runtime.getRuntime().exec("su");
-            
-            writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
-            reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            
-            // Send command
-            writer.write(command + "\n");
-            writer.write("exit\n");
-            writer.flush();
-            
-            // Wait for completion with timeout
-            boolean finished = process.waitFor(timeoutMs, TimeUnit.MILLISECONDS);
-            if (!finished) {
-                LogUtils.logDebug("Root command timed out: " + command);
-                process.destroyForcibly();
-                return null;
-            }
-            
-            // Read output
-            StringBuilder output = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                output.append(line).append("\n");
-            }
-            
-            int exitCode = process.exitValue();
-            String result = output.toString().trim();
-            
-            LogUtils.logDebug("Root command result (exit=" + exitCode + "): " + 
-                (result.length() > 100 ? result.substring(0, 100) + "..." : result));
-            
-            if (callback != null) {
-                callback.onRootCommandResult(command, exitCode == 0, result);
-            }
-            
-            return exitCode == 0 ? result : null;
-            
-        } catch (Exception e) {
-            LogUtils.logDebug("Error executing root command: " + e.getMessage());
-            if (callback != null) {
-                callback.onRootError("Command execution failed: " + e.getMessage());
-            }
-            return null;
-        } finally {
-            // Clean up resources
-            try {
-                if (writer != null) writer.close();
-                if (reader != null) reader.close();
-                if (process != null && process.isAlive()) {
-                    process.destroyForcibly();
-                }
-            } catch (Exception e) {
-                LogUtils.logDebug("Error cleaning up root command resources: " + e.getMessage());
-            }
-        }
-    }
-    
-    /**
-     * Execute multiple root commands in a single su session
-     */
-    public List<String> executeRootCommands(String[] commands) {
-        return executeRootCommands(commands, 15000); // Default 15 second timeout for multiple commands
-    }
-    
-    /**
-     * Execute multiple root commands with timeout
-     */
-    public List<String> executeRootCommands(String[] commands, long timeoutMs) {
-        List<String> results = new ArrayList<>();
-        
-        if (!isRootAvailable() || commands == null || commands.length == 0) {
-            return results;
-        }
-        
-        LogUtils.logDebug("Executing " + commands.length + " root commands");
-        
-        Process process = null;
-        BufferedReader reader = null;
-        BufferedWriter writer = null;
-        
-        try {
-            process = Runtime.getRuntime().exec("su");
-            writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
-            reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            
-            // Send all commands
-            for (String command : commands) {
-                writer.write(command + "\n");
-                writer.write("echo '---COMMAND_SEPARATOR---'\n");
-            }
-            writer.write("exit\n");
-            writer.flush();
-            
-            // Wait for completion
-            boolean finished = process.waitFor(timeoutMs, TimeUnit.MILLISECONDS);
-            if (!finished) {
-                LogUtils.logDebug("Root commands timed out");
-                process.destroyForcibly();
-                return results;
-            }
-            
-            // Read output and split by separator
-            StringBuilder currentOutput = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if ("---COMMAND_SEPARATOR---".equals(line)) {
-                    results.add(currentOutput.toString().trim());
-                    currentOutput.setLength(0);
-                } else {
-                    currentOutput.append(line).append("\n");
-                }
-            }
-            
-            // Add final output if any
-            if (currentOutput.length() > 0) {
-                results.add(currentOutput.toString().trim());
-            }
-            
-            LogUtils.logDebug("Root commands completed: " + results.size() + " results");
-            
-        } catch (Exception e) {
-            LogUtils.logDebug("Error executing root commands: " + e.getMessage());
-            if (callback != null) {
-                callback.onRootError("Batch command execution failed: " + e.getMessage());
-            }
-        } finally {
-            try {
-                if (writer != null) writer.close();
-                if (reader != null) reader.close();
-                if (process != null && process.isAlive()) {
-                    process.destroyForcibly();
-                }
-            } catch (Exception e) {
-                LogUtils.logDebug("Error cleaning up batch command resources: " + e.getMessage());
-            }
-        }
-        
-        return results;
-    }
-    
-    /**
-     * Start persistent root shell session
-     */
-    public boolean startRootSession() {
-        if (!isRootAvailable()) {
-            LogUtils.logDebug("Cannot start root session - root not available");
-            return false;
-        }
-        
-        if (rootProcess != null && rootProcess.isAlive()) {
-            LogUtils.logDebug("Root session already active");
-            return true;
-        }
-        
-        try {
-            LogUtils.logDebug("Starting persistent root session...");
-            rootProcess = Runtime.getRuntime().exec("su");
-            rootWriter = new BufferedWriter(new OutputStreamWriter(rootProcess.getOutputStream()));
-            rootReader = new BufferedReader(new InputStreamReader(rootProcess.getInputStream()));
-            
-            LogUtils.logDebug("✅ Root session started successfully");
-            return true;
-            
-        } catch (Exception e) {
-            LogUtils.logDebug("Error starting root session: " + e.getMessage());
-            closeRootSession();
-            return false;
-        }
-    }
-    
-    /**
-     * Execute command in persistent root session
-     */
-    public String executeInRootSession(String command) {
-        if (rootProcess == null || !rootProcess.isAlive() || rootWriter == null || rootReader == null) {
-            LogUtils.logDebug("Root session not active, starting new session");
-            if (!startRootSession()) {
-                return null;
-            }
-        }
-        
-        try {
-            LogUtils.logDebug("Executing in root session: " + command);
-            
-            rootWriter.write(command + "\n");
-            rootWriter.write("echo '---END_OF_COMMAND---'\n");
-            rootWriter.flush();
-            
-            StringBuilder output = new StringBuilder();
-            String line;
-            while ((line = rootReader.readLine()) != null) {
-                if ("---END_OF_COMMAND---".equals(line)) {
-                    break;
-                }
-                output.append(line).append("\n");
-            }
-            
-            String result = output.toString().trim();
-            LogUtils.logDebug("Root session command result: " + 
-                (result.length() > 100 ? result.substring(0, 100) + "..." : result));
-            
-            return result;
-            
-        } catch (Exception e) {
-            LogUtils.logDebug("Error executing in root session: " + e.getMessage());
-            closeRootSession();
-            return null;
-        }
-    }
-    
-    /**
-     * Close persistent root session
-     */
-    public void closeRootSession() {
-        try {
-            if (rootWriter != null) {
-                rootWriter.write("exit\n");
-                rootWriter.flush();
-                rootWriter.close();
-                rootWriter = null;
-            }
-            if (rootReader != null) {
-                rootReader.close();
-                rootReader = null;
-            }
-            if (rootProcess != null) {
-                if (rootProcess.isAlive()) {
-                    rootProcess.waitFor(2, TimeUnit.SECONDS);
-                    if (rootProcess.isAlive()) {
-                        rootProcess.destroyForcibly();
-                    }
-                }
-                rootProcess = null;
-            }
-            LogUtils.logDebug("Root session closed");
-        } catch (Exception e) {
-            LogUtils.logDebug("Error closing root session: " + e.getMessage());
-        }
-    }
-    
-    /**
-     * Check root status and display information
-     */
-    public void checkRootStatus() {
-        LogUtils.logUser("🔍 Checking root status...");
-        
-        boolean available = isRootAvailable();
-        boolean granted = hasRootPermission();
-        
-        StringBuilder status = new StringBuilder();
-        status.append("=== Root Status ===\n");
-        status.append("Available: ").append(available ? "✅" : "❌").append("\n");
-        status.append("Permission Granted: ").append(granted ? "✅" : "❌").append("\n");
-        
-        if (available) {
-            if (rootAppPackage != null) {
-                status.append("Root Manager: ").append(rootAppPackage).append("\n");
-            }
-            
-            // Try to get root info
-            String whoami = executeRootCommand("whoami");
-            if (whoami != null) {
-                status.append("Root User: ").append(whoami).append("\n");
-            }
-            
-            String suVersion = executeRootCommand("su --version");
-            if (suVersion != null) {
-                status.append("SU Version: ").append(suVersion).append("\n");
-            }
-        }
-        
-        LogUtils.logUser(status.toString());
-        
-        if (activity != null) {
-            new AlertDialog.Builder(activity)
-                .setTitle("Root Status")
-                .setMessage(status.toString())
-                .setPositiveButton("OK", null)
-                .show();
-        }
-    }
-    
-    /**
-     * Install/copy file using root privileges
-     */
-    public boolean installFileAsRoot(String sourcePath, String targetPath) {
-        if (!isRootReady()) {
-            LogUtils.logDebug("Cannot install file as root - root not ready");
-            return false;
-        }
-        
-        LogUtils.logDebug("Installing file as root: " + sourcePath + " -> " + targetPath);
-        
-        String[] commands = {
-            "cp '" + sourcePath + "' '" + targetPath + "'",
-            "chmod 644 '" + targetPath + "'",
-            "chown system:system '" + targetPath + "'"
-        };
-        
-        List<String> results = executeRootCommands(commands);
-        boolean success = results.size() == commands.length;
-        
-        if (success) {
-            LogUtils.logUser("✅ File installed successfully with root: " + targetPath);
-        } else {
-            LogUtils.logUser("❌ Failed to install file with root: " + targetPath);
-        }
-        
-        return success;
-    }
-    
-    /**
-     * Create directory using root privileges
-     */
-    public boolean createDirectoryAsRoot(String dirPath) {
-        if (!isRootReady()) {
-            return false;
-        }
-        
-        String result = executeRootCommand("mkdir -p '" + dirPath + "' && echo 'SUCCESS'");
-        boolean success = result != null && result.contains("SUCCESS");
-        
-        if (success) {
-            LogUtils.logDebug("Created directory as root: " + dirPath);
-        }
-        
-        return success;
-    }
-    
-    /**
-     * Delete file/directory using root privileges  
-     */
-    public boolean deleteAsRoot(String path) {
-        if (!isRootReady()) {
-            return false;
-        }
-        
-        String result = executeRootCommand("rm -rf '" + path + "' && echo 'DELETED'");
-        boolean success = result != null && result.contains("DELETED");
-        
-        if (success) {
-            LogUtils.logDebug("Deleted as root: " + path);
-        }
-        
-        return success;
-    }
-    
-    /**
-     * Get detailed root information
-     */
-    public String getDetailedStatus() {
-        StringBuilder info = new StringBuilder();
-        info.append("=== Root Manager Status ===\n");
-        
-        boolean available = isRootAvailable();
-        boolean granted = hasRootPermission();
-        
-        info.append("Available: ").append(available ? "✅" : "❌").append("\n");
-        info.append("Permission: ").append(granted ? "✅" : "❌").append("\n");
-        info.append("Ready: ").append(isRootReady() ? "✅" : "❌").append("\n");
-        
-        if (rootAppPackage != null) {
-            info.append("Root App: ").append(rootAppPackage).append("\n");
-        }
-        
-        info.append("Session Active: ").append(
-            (rootProcess != null && rootProcess.isAlive()) ? "✅" : "❌").append("\n");
-        
-        // Add system info if root is available
-        if (available) {
-            String buildTags = android.os.Build.TAGS;
-            info.append("Build Tags: ").append(buildTags != null ? buildTags : "Unknown").append("\n");
-        }
-        
-        return info.toString();
-    }
-    
-    /**
-     * Refresh root availability (call after potential changes)
-     */
-    public void refreshStatus() {
-        LogUtils.logDebug("Refreshing root status...");
-        rootAvailable = null;
-        rootGranted = null;
-        checkRootAvailability();
-    }
-    
-    /**
-     * Check root availability and update cache
-     */
-    private void checkRootAvailability() {
-        // This will update the rootAvailable cache
-        isRootAvailable();
-    }
-    
-    /**
-     * Show toast message
-     */
-    private void showToast(String message) {
-        if (context != null) {
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-        }
-    }
-    
-    /**
-     * Clean up resources
-     */
-    public void cleanup() {
-        closeRootSession();
-        callback = null;
-    }
-}
-
-
-
-===== ModLoader/app/src/main/java/com/modloader/util/ShizukuManager.java =====
-
+--- FILE: /ModLoader/app/src/main/java/com/modloader/util/ShizukuManager.java ---
 // File: ShizukuManager.java (FIXED) - Complete Shizuku Integration with Proper Permission Detection
 // Path: /app/src/main/java/com/modloader/util/ShizukuManager.java
 
@@ -1317,9 +570,7 @@ public class ShizukuManager {
 } 
 
 
-
-===== ModLoader/app/src/main/res/drawable/gradient_background_135.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/drawable/gradient_background_135.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <gradient
@@ -1331,9 +582,7 @@ public class ShizukuManager {
 </shape>
 
 
-
-===== ModLoader/app/src/main/res/drawable/ic_arrow_back.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/drawable/ic_arrow_back.xml ---
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
@@ -1346,9 +595,7 @@ public class ShizukuManager {
 
 
 
-
-===== ModLoader/app/src/main/res/drawable/ic_launcher_background.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/drawable/ic_launcher_background.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
@@ -1522,9 +769,7 @@ public class ShizukuManager {
 
 
 
-
-===== ModLoader/app/src/main/res/drawable-v24/ic_launcher_foreground.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/drawable-v24/ic_launcher_foreground.xml ---
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp"
@@ -1557,9 +802,7 @@ public class ShizukuManager {
 </vector>
 
 
-
-===== ModLoader/app/src/main/res/layout/activity_about.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/activity_about.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -1597,9 +840,7 @@ public class ShizukuManager {
 </ScrollView>
 
 
-
-===== ModLoader/app/src/main/res/layout/activity_addon_management.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/activity_addon_management.xml ---
 <!-- File: activity_addon_management.xml -->
 <!-- Path: app/src/main/res/layout/activity_addon_management.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -1770,9 +1011,7 @@ public class ShizukuManager {
 
 
 
-
-===== ModLoader/app/src/main/res/layout/activity_addons.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/activity_addons.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -1787,9 +1026,7 @@ public class ShizukuManager {
 
 
 
-
-===== ModLoader/app/src/main/res/layout/activity_dll_mod.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/activity_dll_mod.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -1939,9 +1176,7 @@ public class ShizukuManager {
 </ScrollView>
 
 
-
-===== ModLoader/app/src/main/res/layout/activity_instructions.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/activity_instructions.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -1985,9 +1220,7 @@ public class ShizukuManager {
 
 
 
-
-===== ModLoader/app/src/main/res/layout/activity_log.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/activity_log.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/log_layout"
@@ -2022,9 +1255,7 @@ public class ShizukuManager {
 </LinearLayout>
 
 
-
-===== ModLoader/app/src/main/res/layout/activity_log_viewer_enhanced.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/activity_log_viewer_enhanced.xml ---
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -2265,9 +1496,7 @@ public class ShizukuManager {
 </LinearLayout>
 
 
-
-===== ModLoader/app/src/main/res/layout/activity_main.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/activity_main.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
      xmlns:android="http://schemas.android.com/apk/res/android"
@@ -2475,9 +1704,7 @@ public class ShizukuManager {
 </ScrollView>
 
 
-
-===== ModLoader/app/src/main/res/layout/activity_mod_list.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/activity_mod_list.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -2545,9 +1772,7 @@ public class ShizukuManager {
 
 
 
-
-===== ModLoader/app/src/main/res/layout/activity_mod_management.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/activity_mod_management.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -2811,9 +2036,7 @@ public class ShizukuManager {
 </ScrollView>
 
 
-
-===== ModLoader/app/src/main/res/layout/activity_offline_diagnostic.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/activity_offline_diagnostic.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <!-- File: activity_offline_diagnostic.xml -->
 <!-- Path: /res/layout/activity_offline_diagnostic.xml -->
@@ -3039,9 +2262,7 @@ public class ShizukuManager {
 </ScrollView>
 
 
-
-===== ModLoader/app/src/main/res/layout/activity_settings_enhanced.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/activity_settings_enhanced.xml ---
 <!-- File: activity_settings_enhanced.xml (Enhanced Settings Layout - Error-Free) -->
 <!-- Path: /app/src/main/res/layout/activity_settings_enhanced.xml -->
 
@@ -3594,9 +2815,7 @@ public class ShizukuManager {
 </ScrollView>
 
 
-
-===== ModLoader/app/src/main/res/layout/activity_setup_guide.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/activity_setup_guide.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -3879,9 +3098,7 @@ public class ShizukuManager {
 </ScrollView>
 
 
-
-===== ModLoader/app/src/main/res/layout/activity_specific_selection.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/activity_specific_selection.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -4271,9 +3488,7 @@ public class ShizukuManager {
 </ScrollView>
 
 
-
-===== ModLoader/app/src/main/res/layout/activity_terraria_specific_updated.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/activity_terraria_specific_updated.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -4664,9 +3879,7 @@ public class ShizukuManager {
 </ScrollView>
 
 
-
-===== ModLoader/app/src/main/res/layout/activity_unified_loader.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/activity_unified_loader.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -4843,9 +4056,7 @@ public class ShizukuManager {
 </LinearLayout>
 
 
-
-===== ModLoader/app/src/main/res/layout/activity_universal.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/activity_universal.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -4882,9 +4093,7 @@ public class ShizukuManager {
 </LinearLayout>
 
 
-
-===== ModLoader/app/src/main/res/layout/addon_config_dialog.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/addon_config_dialog.xml ---
 <!-- File: addon_config_dialog.xml -->
 <!-- Path: app/src/main/res/layout/addon_config_dialog.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -4959,9 +4168,7 @@ public class ShizukuManager {
 
 
 
-
-===== ModLoader/app/src/main/res/layout/addon_creation_dialog.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/addon_creation_dialog.xml ---
 <!-- File: addon_creation_dialog.xml -->
 <!-- Path: app/src/main/res/layout/addon_creation_dialog.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -5210,9 +4417,7 @@ public class ShizukuManager {
 </LinearLayout>
 
 
-
-===== ModLoader/app/src/main/res/layout/dialog_log_settings.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/dialog_log_settings.xml ---
 <!-- File: dialog_log_settings.xml (NEW DIALOG) - Settings for Log Viewer -->
 <!-- Path: /main/res/layout/dialog_log_settings.xml -->
 
@@ -5291,9 +4496,7 @@ public class ShizukuManager {
 </LinearLayout>
 
 
-
-===== ModLoader/app/src/main/res/layout/item_addon.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/item_addon.xml ---
 <!-- File: item_addon.xml -->
 <!-- Path: app/src/main/res/layout/item_addon.xml -->
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -5455,9 +4658,7 @@ public class ShizukuManager {
 
 
 
-
-===== ModLoader/app/src/main/res/layout/item_log_entry.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/item_log_entry.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -5542,9 +4743,7 @@ public class ShizukuManager {
 </LinearLayout>
 
 
-
-===== ModLoader/app/src/main/res/layout/item_mod.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/layout/item_mod.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -5607,9 +4806,7 @@ public class ShizukuManager {
 
 
 
-
-===== ModLoader/app/src/main/res/menu/addon_management_menu.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/menu/addon_management_menu.xml ---
 <!-- File: addon_management_menu.xml -->
 <!-- Path: app/src/main/res/menu/addon_management_menu.xml -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
@@ -5636,9 +4833,7 @@ public class ShizukuManager {
 </menu>
 
 
-
-===== ModLoader/app/src/main/res/menu/log_viewer_menu.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/menu/log_viewer_menu.xml ---
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -5669,9 +4864,7 @@ public class ShizukuManager {
 </menu>
 
 
-
-===== ModLoader/app/src/main/res/menu/main_menu.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/menu/main_menu.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -5707,9 +4900,7 @@ public class ShizukuManager {
 </menu>
 
 
-
-===== ModLoader/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
     <background android:drawable="@drawable/ic_launcher_background" />
@@ -5717,9 +4908,7 @@ public class ShizukuManager {
 </adaptive-icon>
 
 
-
-===== ModLoader/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
     <background android:drawable="@drawable/ic_launcher_background" />
@@ -5727,9 +4916,7 @@ public class ShizukuManager {
 </adaptive-icon>
 
 
-
-===== ModLoader/app/src/main/res/values/colors.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/values/colors.xml ---
 <resources>
     <color name="purple_200">#BB86FC</color>
     <color name="purple_500">#6200EE</color>
@@ -5743,9 +4930,7 @@ public class ShizukuManager {
 
 
 
-
-===== ModLoader/app/src/main/res/values/strings.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/values/strings.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
    <string name="app_name">Terraria ML</string>
@@ -5764,9 +4949,7 @@ public class ShizukuManager {
 
 
 
-
-===== ModLoader/app/src/main/res/values/themes.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/values/themes.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme (Light) -->
@@ -5782,18 +4965,14 @@ public class ShizukuManager {
 </resources>
 
 
-
-===== ModLoader/app/src/main/res/values-night/colors.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/values-night/colors.xml ---
 <resources>
     <color name="white">#000000</color>
     <color name="black">#FFFFFF</color>
 </resources>
 
 
-
-===== ModLoader/app/src/main/res/values-night/themes.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/values-night/themes.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Night mode theme -->
@@ -5809,9 +4988,7 @@ public class ShizukuManager {
 </resources>
 
 
-
-===== ModLoader/app/src/main/res/xml/backup_rules.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/xml/backup_rules.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <full-backup-content>
     <!-- Include app-specific files -->
@@ -5826,9 +5003,7 @@ public class ShizukuManager {
 </full-backup-content>
 
 
-
-===== ModLoader/app/src/main/res/xml/data_extraction_rules.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/xml/data_extraction_rules.xml ---
 <?xml version="1.0" encoding="utf-8"?><!--
    Sample data extraction rules file; uncomment and customize as necessary.
    See https://developer.android.com/about/versions/12/backup-restore#xml-changes
@@ -5850,9 +5025,7 @@ public class ShizukuManager {
 </data-extraction-rules>
 
 
-
-===== ModLoader/app/src/main/res/xml/file_paths.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/xml/file_paths.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
     <external-files-path
@@ -5861,9 +5034,7 @@ public class ShizukuManager {
 </paths>
 
 
-
-===== ModLoader/app/src/main/res/xml/file_provider_paths.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/xml/file_provider_paths.xml ---
 <paths xmlns:android="http://schemas.android.com/tools">
     
     <!-- External storage root (for legacy support) -->
@@ -5951,9 +5122,7 @@ public class ShizukuManager {
 </paths>
 
 
-
-===== ModLoader/app/src/main/res/xml/paths.xml =====
-
+--- FILE: /ModLoader/app/src/main/res/xml/paths.xml ---
 <?xml version="1.0" encoding="utf-8"?>
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
     <external-files-path
@@ -5962,9 +5131,7 @@ public class ShizukuManager {
 </paths>
 
 
-
-===== ModLoader/app/src/main/resources/log4j2.xml =====
-
+--- FILE: /ModLoader/app/src/main/resources/log4j2.xml ---
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- File: log4j2.xml (NEW) - Advanced Log4j2 Configuration for ModLoader -->
 <!-- Path: /app/src/main/resources/log4j2.xml -->
